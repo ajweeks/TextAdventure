@@ -18,51 +18,60 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="textworldBaseListener.cpp">
+    <ClCompile Include="source\textworldVisitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="textworldBaseVisitor.cpp">
+    <ClCompile Include="source\textworldListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="textworldLexer.cpp">
+    <ClCompile Include="source\textworldParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="textworldListener.cpp">
+    <ClCompile Include="source\textworldLexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="textworldParser.cpp">
+    <ClCompile Include="source\textworldBaseVisitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="textworldVisitor.cpp">
+    <ClCompile Include="source\textworldBaseListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainVisitor.cpp">
+    <ClCompile Include="source\MainVisitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="textworldBaseListener.h">
+    <ClInclude Include="include\textworldVisitor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="textworldBaseVisitor.h">
+    <ClInclude Include="include\textworldParser.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="textworldLexer.h">
+    <ClInclude Include="include\textworldListener.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="textworldListener.h">
+    <ClInclude Include="include\textworldLexer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="textworldParser.h">
+    <ClInclude Include="include\textworldBaseVisitor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="textworldVisitor.h">
+    <ClInclude Include="include\textworldBaseListener.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="MainVisitor.h">
+    <ClInclude Include="include\MainVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\enums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

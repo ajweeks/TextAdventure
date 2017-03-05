@@ -11,4 +11,7 @@ public:
 	virtual antlrcpp::Any visitItem(textworldParser::ItemContext *context) override;
 
 	virtual antlrcpp::Any visitAssignment(textworldParser::AssignmentContext *context) override;
+
+private:
+
 };
