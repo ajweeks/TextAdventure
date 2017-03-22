@@ -103,9 +103,9 @@ void World::Initialize()
 	Action aEat = { Action_Type::EAT,{ "eat", "consume", "gobble down" } };
 	Action aRead = { Action_Type::READ,{ "read", "study" } };
 
-	Item iRock = { { "rock", "stone", "boulder" },{ aInspect, aTrade, aThrow } };
-	Item iApple = { { "apple" },{ aInspect, aTrade, aThrow, aEat } };
-	Item iBook = { { "book" },{ aInspect, aTrade, aThrow, aRead } };
+	Item iRock = { { "rock", "stone", "boulder" },{ aInspect, aTrade, aThrow }, "A large, chunky rock" };
+	Item iApple = { { "apple" },{ aInspect, aTrade, aThrow, aEat }, "A slightly-moudly looking red apple" };
+	Item iBook = { { "book" },{ aInspect, aTrade, aThrow, aRead }, "Looks like some kind of bible written in a cryillic language" };
 
 	Area area1 = {};
 	area1.name = "area1";
@@ -257,7 +257,21 @@ ApplyInputResult ApplyInput(World& world, const ParsedInput& parsedInput)
 	case Action_Type::LOOK:
 		break;
 	case Action_Type::INSPECT:
-		break;
+	{
+		std::string itemToBeInspectedName = parsedInput.remainingString;
+
+		for (size_t i = 0; i < world.player.inventory.size(); i++)
+		{
+			if (world.player.inventory[i].names[0].compare(itemToBeInspectedName) == 0)
+			{
+				std::string itemDescription = world.player.inventory[i].description;
+
+				std::cout << itemDescription << std::endl;
+
+				result.success = true;
+			}
+		}
+	} break;
 	case Action_Type::READ:
 		break;
 	case Action_Type::ATTACK:
@@ -278,7 +292,7 @@ ApplyInputResult ApplyInput(World& world, const ParsedInput& parsedInput)
 	return result;
 }
 
-void PrintErrorMessage(const ParsedInput& parsedInput, const ApplyInputResult& inputResult)
+void PrintInvalidInputMessage(const ParsedInput& parsedInput, const ApplyInputResult& inputResult)
 {
 	std::string remainingStringNoWS = parsedInput.remainingString;
 	RemoveWhiteSpaces(remainingStringNoWS);
@@ -398,7 +412,7 @@ void PlayGame()
 		{
 			if (!inputResult.success)
 			{
-				PrintErrorMessage(parsedInput, inputResult);
+				PrintInvalidInputMessage(parsedInput, inputResult);
 			}
 
 			std::string input;

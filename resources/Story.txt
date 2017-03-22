@@ -1,18 +1,18 @@
 Text Adventure
 
 Quick storyline rundown: 
-Mystery - trying to figure out who/where you are. Slightly futuristic, but still very believable. Set on a space ship (maybe not obvious until half way through the story?) Or maybe underground (Portal). You have to pretend to not know about things in order to break out.
+Mystery - trying to figure out who/where you are. Slightly futuristic, but still believable. Set on a space ship (maybe not obvious until half way through the story?) Or maybe underground (Portal 1 & 2-like). You have to pretend to not know about things in order to break out.
 
 If the employees of the facility realize you are conscious, they'll terminate you. (save games?) (How will the player be able to evade enemies? Hearing?)
 
 Story:
 
 ---
-The year is 2029. You are awoken by a blaring alarm. You look around the room - you see a  metal object sitting on the counter. It seems to be hot - you can see heat waves emminating from it. Across from the strange shiny object you see a semi-reflective window. From the window you see a vast body of water - but something is off about it, there are no waves. Is it an ocean? A lake? A pool?
+The year is 2029. You are awoken by a blaring alarm. You look around the room - you see a  metal object sitting on the counter. It seems to be hot - you can see heat waves emanating from it. Across from the strange shiny object you see a semi-reflective window. From the window you see a vast body of water - but something is off about it, there are no waves. Is it an ocean? A lake? A pool?
 
-Suddenly - there's a loud knock on the door. *BANG* *BANG* *BANG* Before you have a chance to react the door slides open and the alarm stops. Your eyes are still adjusting to the brightness of the sunlight pouring into your room so you can't quite make out the figure standing in the doorway. Their silhouette is large and whoever it is clearly hits the gym frequently. The mysterious figure barks loudly "Get out of bed subject 213! It's time for your weekly inspection. You have five minutes to make your way to auditorium 11. If you're late again there will be consequences."
+Suddenly - there's a loud knock on the door. *BANG* *BANG* *BANG* Before you have a chance to react the door slides open and the alarm stops. Your eyes are still adjusting to the brightness of the sunlight pouring into your room so you can't quite make out the figure standing in the doorway. Their silhouette is large and intimidating. The mysterious figure barks loudly "Get out of bed subject 213! It's time for your weekly inspection. You have five minutes to make your way to auditorium 11. If you're late again there will be consequences."
 
-The figure leaves, and you now see that the hot object is now violently shaking. It's lost its shine, the heat has caused the object to begin to glow white. Then, suddenly, silence. The object instantly seemed to be back to normal. You slowly walk over to it and inch your hand towards it. You ever so gently touch the object, its surface cool to the touch. You try picking it up, but it must have an incredible mass as you can't make it budge.
+The figure exits the room and heads left. You now see that the hot object across from you is now violently shaking. It's lost its shine, the heat has caused the object to begin to glow white. Then, suddenly, silence. The object instantly seemed to be back to normal. You slowly walk over to it and inch your hand towards it. You ever so gently touch the object, its surface cool to the touch. You try picking it up, but it must have an incredible mass as you can't make it budge.
 
 You better get going to this auditorium if you know whats good for you though.
 ---
@@ -30,4 +30,37 @@ You cautiously walk into the hallway, and see a seemingly-endless row of doors t
 ---
 
 Available commands:
+	Walk left down the hallway
+	Walk right down the hallway
+	
+---
+You walk to the left, the auditorium is probably that direction, since that's the way the figure went earlier. You walk for minutes before seeing anything new. The entire way you see seemingly identical doors, one after another, and the only sound you hear is an almost silent buzzing sound coming from tiny round speakers placed above every door. You eventually come to the end of the hallway. You're confronted with a set of large double-doors, with a label above them "Wing 0".
+---
+
+Available commands:
+	Open doors (exit hallway)
+	Walk back to room
+	
+---
+You attempt to push the doors open, and with all your strength - you just budge them open enough to squeeze through. On the other side you immediately feel a warm, humid air surround you. You see that you now stand in a large, empty room. There seems to be another set of doors across the room, and a small window halfway along the wall to your right.
+---
+
+Available commands:
+	Look out window (walk up to window)
+	Walk over to other doors
+	
+---
+
+---
+
+
+
+
+
+
+
+
+
+
+
 	

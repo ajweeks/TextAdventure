@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)include\;$(ANTLR)antlr4-cpp-runtime-vs2015\antlr4-runtime\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)generated;$(SolutionDir)include;$(ANTLR)antlr4-cpp-runtime-vs2015\antlr4-runtime;$(IncludePath)</IncludePath>
     <LibraryPath>$(ANTLR)antlr4-cpp-runtime-vs2015\lib\vs-2015\x86\Release DLL\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -81,6 +81,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)generated;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -149,16 +150,22 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="generated\textworldBaseListener.cpp" />
+    <ClCompile Include="generated\textworldBaseVisitor.cpp" />
+    <ClCompile Include="generated\textworldLexer.cpp" />
+    <ClCompile Include="generated\textworldListener.cpp" />
+    <ClCompile Include="generated\textworldParser.cpp" />
+    <ClCompile Include="generated\textworldVisitor.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\MainVisitor.cpp" />
-    <ClCompile Include="source\textworldBaseListener.cpp" />
-    <ClCompile Include="source\textworldBaseVisitor.cpp" />
-    <ClCompile Include="source\textworldLexer.cpp" />
-    <ClCompile Include="source\textworldListener.cpp" />
-    <ClCompile Include="source\textworldParser.cpp" />
-    <ClCompile Include="source\textworldVisitor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="generated\textworldBaseListener.h" />
+    <ClInclude Include="generated\textworldBaseVisitor.h" />
+    <ClInclude Include="generated\textworldLexer.h" />
+    <ClInclude Include="generated\textworldListener.h" />
+    <ClInclude Include="generated\textworldParser.h" />
+    <ClInclude Include="generated\textworldVisitor.h" />
     <ClInclude Include="include\enums.h" />
     <ClInclude Include="include\helpers.h" />
     <ClInclude Include="include\main.h" />

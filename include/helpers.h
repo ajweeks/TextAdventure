@@ -17,6 +17,8 @@ void RemoveWhiteSpaces(std::string& str)
 
 void RemoveLeadingAndTrailingWhiteSpaces(std::string& str)
 {
+	if (str.empty()) return;
+
 	if (iswspace(str.at(0))) str.erase(str.begin(), str.begin() + 1);
 	if (iswspace(str.at(str.length() - 1))) str.erase(str.end() - 1, str.end());
 }

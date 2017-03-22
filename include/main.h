@@ -16,6 +16,7 @@ struct Item
 {
 	std::vector<std::string> names;
 	std::vector<Action> actions;
+	std::string description;
 };
 std::ostream& operator<<(std::ostream& stream, const Item& item)
 {
@@ -46,6 +47,7 @@ struct Player
 
 struct World
 {
+	Player player;
 	Area* currentArea;
 	std::vector<Area> areas;
 
@@ -68,7 +70,7 @@ struct ParsedInput
 
 void MapActions();
 void PlayGame();
-void PrintErrorMessage(const ParsedInput& parsedInput, const ApplyInputResult& inputResult);
+void PrintInvalidInputMessage(const ParsedInput& parsedInput, const ApplyInputResult& inputResult);
 ApplyInputResult ApplyInput(World& world, const ParsedInput& parsedInput);
 ParsedInput ParseInput(const std::string& input);
 std::string RemoveExtraWordsFromRemainingInput(std::string& remainingString);

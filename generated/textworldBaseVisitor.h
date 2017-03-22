@@ -1,5 +1,5 @@
 
-// Generated from textworld.g4 by ANTLR 4.6
+// Generated from resources/textworld.g4 by ANTLR 4.6
 
 #pragma once
 

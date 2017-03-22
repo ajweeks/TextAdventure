@@ -18,28 +18,28 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\textworldVisitor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\textworldListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\textworldParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\textworldLexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\textworldBaseVisitor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\textworldBaseListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\MainVisitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\textworldBaseListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\textworldBaseVisitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\textworldLexer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\textworldListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\textworldParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="generated\textworldVisitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,6 +72,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\textworldBaseListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\textworldBaseVisitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\textworldLexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\textworldListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\textworldParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="generated\textworldVisitor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
