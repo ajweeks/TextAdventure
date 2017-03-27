@@ -1,33 +1,23 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <sstream>
 #include <algorithm>
 
 #define WINDOWS true
 
-void ToLower(std::string& str)
-{
-	std::transform(str.begin(), str.end(), str.begin(), tolower);
-}
+void ToLower(std::string& str);
+void RemoveWhiteSpaces(std::string& str);
+void RemoveLeadingAndTrailingWhiteSpaces(std::string& str);
+void RemoveCharFromString(std::string& str, char character);
 
-void RemoveWhiteSpaces(std::string& str)
-{
-	str.erase(std::remove_if(str.begin(), str.end(), iswspace), str.end());
-}
+std::vector<std::string> Split(const std::string& values, char delim = '\n');
 
-void RemoveLeadingAndTrailingWhiteSpaces(std::string& str)
-{
-	if (str.empty()) return;
+template<class T>
+bool ContainsDuplicates(const std::vector<T>& vec);
 
-	if (iswspace(str.at(0))) str.erase(str.begin(), str.begin() + 1);
-	if (iswspace(str.at(str.length() - 1))) str.erase(str.end() - 1, str.end());
-}
+template<class T>
+bool Contains(const std::vector<T>& vec, const T& t);
 
-void ClearConsole()
-{
-#if WINDOWS
-	system("CLS");
-#elif MAC
-	system("CLEAR");
-#endif
-}
+void ClearConsole();

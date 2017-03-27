@@ -22,6 +22,12 @@ public:
   virtual void enterItem(textworldParser::ItemContext * /*ctx*/) override { }
   virtual void exitItem(textworldParser::ItemContext * /*ctx*/) override { }
 
+  virtual void enterArea(textworldParser::AreaContext * /*ctx*/) override { }
+  virtual void exitArea(textworldParser::AreaContext * /*ctx*/) override { }
+
+  virtual void enterAction(textworldParser::ActionContext * /*ctx*/) override { }
+  virtual void exitAction(textworldParser::ActionContext * /*ctx*/) override { }
+
   virtual void enterAssignment(textworldParser::AssignmentContext * /*ctx*/) override { }
   virtual void exitAssignment(textworldParser::AssignmentContext * /*ctx*/) override { }
 

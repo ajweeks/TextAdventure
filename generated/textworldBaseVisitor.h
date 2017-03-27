@@ -23,6 +23,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitArea(textworldParser::AreaContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAction(textworldParser::ActionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitAssignment(textworldParser::AssignmentContext *ctx) override {
     return visitChildren(ctx);
   }

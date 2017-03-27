@@ -23,6 +23,10 @@ public:
 
     virtual antlrcpp::Any visitItem(textworldParser::ItemContext *context) = 0;
 
+    virtual antlrcpp::Any visitArea(textworldParser::AreaContext *context) = 0;
+
+    virtual antlrcpp::Any visitAction(textworldParser::ActionContext *context) = 0;
+
     virtual antlrcpp::Any visitAssignment(textworldParser::AssignmentContext *context) = 0;
 
     virtual antlrcpp::Any visitValue(textworldParser::ValueContext *context) = 0;

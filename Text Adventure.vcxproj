@@ -147,15 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="generated\textworldBaseListener.cpp" />
     <ClCompile Include="generated\textworldBaseVisitor.cpp" />
     <ClCompile Include="generated\textworldLexer.cpp" />
     <ClCompile Include="generated\textworldListener.cpp" />
     <ClCompile Include="generated\textworldParser.cpp" />
     <ClCompile Include="generated\textworldVisitor.cpp" />
+    <ClCompile Include="source\helpers.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\MainVisitor.cpp" />
   </ItemGroup>

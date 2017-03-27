@@ -57,7 +57,7 @@ int main(int argc, const char* argv[])
 
 void Area::Describe() const
 {
-	std::cout << "You are in " << name << std::endl;
+	std::cout << std::endl << "You are in " << name << std::endl;
 
 	DescribeItems();
 	DescribeNeighbors();
@@ -98,7 +98,7 @@ void Area::DescribeNeighbors() const
 void World::Initialize()
 {
 	Action aThrow = { Action_Type::THROW,{ "throw", "huck" } };
-	Action aInspect = { Action_Type::INSPECT,{ "inspect", "examine", "look at", "read" } };
+	Action aInspect = { Action_Type::INSPECT,{ "inspect", "examine", "look at" } };
 	Action aTrade = { Action_Type::TRADE,{ "trade", "swap" } };
 	Action aEat = { Action_Type::EAT,{ "eat", "consume", "gobble down" } };
 	Action aRead = { Action_Type::READ,{ "read", "study" } };
@@ -211,6 +211,7 @@ ApplyInputResult ApplyInput(World& world, const ParsedInput& parsedInput)
 				{
 					world.currentArea = world.currentArea->neighbors[i].first;
 					result.success = true;
+					result.describeAreaAgain = true;
 					return result;
 				}
 			}
@@ -227,6 +228,7 @@ ApplyInputResult ApplyInput(World& world, const ParsedInput& parsedInput)
 					world.currentArea = world.currentArea->neighbors[i].first;
 					result.success = true;
 					result.extraInfo = neighborName;
+					result.describeAreaAgain = true;
 					return result;
 				}
 			}
@@ -260,15 +262,18 @@ ApplyInputResult ApplyInput(World& world, const ParsedInput& parsedInput)
 	{
 		std::string itemToBeInspectedName = parsedInput.remainingString;
 
-		for (size_t i = 0; i < world.player.inventory.size(); i++)
+		for (Item& item : world.currentArea->items)
 		{
-			if (world.player.inventory[i].names[0].compare(itemToBeInspectedName) == 0)
+			if (item.names[0].compare(itemToBeInspectedName) == 0)
 			{
-				std::string itemDescription = world.player.inventory[i].description;
+				std::string itemDescription = item.description;
 
 				std::cout << itemDescription << std::endl;
 
 				result.success = true;
+				result.describeAreaAgain = false;
+
+				return result;
 			}
 		}
 	} break;
@@ -400,14 +405,20 @@ void PlayGame()
 
 	Player player;
 
+	bool describeArea = true;
+
 	bool playing = true;
 	while (playing)
 	{
-		world.currentArea->Describe();
+		if (describeArea)
+		{
+			world.currentArea->Describe();
+		}
 
 		ParsedInput parsedInput;
 		ApplyInputResult inputResult = {};
 		inputResult.success = true; // Don't print the warning the first time through the loop
+		inputResult.describeAreaAgain = true;
 		do
 		{
 			if (!inputResult.success)
@@ -423,7 +434,10 @@ void PlayGame()
 			inputResult = ApplyInput(world, parsedInput);
 		} while (!inputResult.success);
 
-		ClearConsole();
+
+		describeArea = inputResult.describeAreaAgain;
+
+		//ClearConsole();
 	}
 }
 

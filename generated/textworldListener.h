@@ -20,6 +20,12 @@ public:
   virtual void enterItem(textworldParser::ItemContext *ctx) = 0;
   virtual void exitItem(textworldParser::ItemContext *ctx) = 0;
 
+  virtual void enterArea(textworldParser::AreaContext *ctx) = 0;
+  virtual void exitArea(textworldParser::AreaContext *ctx) = 0;
+
+  virtual void enterAction(textworldParser::ActionContext *ctx) = 0;
+  virtual void exitAction(textworldParser::ActionContext *ctx) = 0;
+
   virtual void enterAssignment(textworldParser::AssignmentContext *ctx) = 0;
   virtual void exitAssignment(textworldParser::AssignmentContext *ctx) = 0;
 

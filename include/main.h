@@ -57,6 +57,7 @@ struct World
 struct ApplyInputResult
 {
 	bool success;
+	bool describeAreaAgain;
 	std::string extraInfo;
 };
 
