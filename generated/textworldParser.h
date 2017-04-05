@@ -12,13 +12,13 @@
 class  textworldParser : public antlr4::Parser {
 public:
   enum {
-    AREA = 1, ITEM = 2, ACTION = 3, LCB = 4, RCB = 5, EQ = 6, SC = 7, ID = 8, 
-    STRING = 9, INT = 10, LIST = 11, WS = 12, COMMENT = 13
+    AREA = 1, ITEM = 2, ACTION = 3, PLAYER = 4, LCB = 5, RCB = 6, EQ = 7, 
+    SC = 8, ID = 9, STRING = 10, INT = 11, WS = 12, COMMA = 13, COMMENT = 14
   };
 
   enum {
-    RuleWorld = 0, RuleItem = 1, RuleArea = 2, RuleAction = 3, RuleAssignment = 4, 
-    RuleValue = 5
+    RuleWorld = 0, RuleItem = 1, RuleArea = 2, RuleAction = 3, RulePlayer = 4, 
+    RuleAssignment = 5, RuleValue = 6
   };
 
   textworldParser(antlr4::TokenStream *input);
@@ -35,6 +35,7 @@ public:
   class ItemContext;
   class AreaContext;
   class ActionContext;
+  class PlayerContext;
   class AssignmentContext;
   class ValueContext; 
 
@@ -42,6 +43,7 @@ public:
   public:
     WorldContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    PlayerContext *player();
     std::vector<AreaContext *> area();
     AreaContext* area(size_t i);
     std::vector<ActionContext *> action();
@@ -118,6 +120,26 @@ public:
 
   ActionContext* action();
 
+  class  PlayerContext : public antlr4::ParserRuleContext {
+  public:
+    PlayerContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLAYER();
+    antlr4::tree::TerminalNode *ID();
+    antlr4::tree::TerminalNode *LCB();
+    antlr4::tree::TerminalNode *RCB();
+    std::vector<AssignmentContext *> assignment();
+    AssignmentContext* assignment(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  PlayerContext* player();
+
   class  AssignmentContext : public antlr4::ParserRuleContext {
   public:
     AssignmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -142,7 +164,12 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *STRING();
     antlr4::tree::TerminalNode *INT();
-    antlr4::tree::TerminalNode *LIST();
+    antlr4::tree::TerminalNode *LCB();
+    std::vector<ValueContext *> value();
+    ValueContext* value(size_t i);
+    antlr4::tree::TerminalNode *RCB();
+    std::vector<antlr4::tree::TerminalNode *> COMMA();
+    antlr4::tree::TerminalNode* COMMA(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

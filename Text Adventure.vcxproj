@@ -153,9 +153,14 @@
     <ClCompile Include="generated\textworldListener.cpp" />
     <ClCompile Include="generated\textworldParser.cpp" />
     <ClCompile Include="generated\textworldVisitor.cpp" />
+    <ClCompile Include="source\enums.cpp" />
     <ClCompile Include="source\helpers.cpp" />
+    <ClCompile Include="source\IO.cpp" />
+    <ClCompile Include="source\Logger.cpp" />
     <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\TextAdventure.cpp" />
     <ClCompile Include="source\MainVisitor.cpp" />
+    <ClCompile Include="source\structs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="generated\textworldBaseListener.h" />
@@ -166,8 +171,11 @@
     <ClInclude Include="generated\textworldVisitor.h" />
     <ClInclude Include="include\enums.h" />
     <ClInclude Include="include\helpers.h" />
-    <ClInclude Include="include\main.h" />
+    <ClInclude Include="include\IO.h" />
+    <ClInclude Include="include\Logger.h" />
+    <ClInclude Include="include\TextAdventure.h" />
     <ClInclude Include="include\MainVisitor.h" />
+    <ClInclude Include="include\structs.h" />
     <ClInclude Include="include\textworldBaseListener.h" />
     <ClInclude Include="include\textworldBaseVisitor.h" />
     <ClInclude Include="include\textworldLexer.h" />

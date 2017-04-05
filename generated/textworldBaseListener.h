@@ -28,6 +28,9 @@ public:
   virtual void enterAction(textworldParser::ActionContext * /*ctx*/) override { }
   virtual void exitAction(textworldParser::ActionContext * /*ctx*/) override { }
 
+  virtual void enterPlayer(textworldParser::PlayerContext * /*ctx*/) override { }
+  virtual void exitPlayer(textworldParser::PlayerContext * /*ctx*/) override { }
+
   virtual void enterAssignment(textworldParser::AssignmentContext * /*ctx*/) override { }
   virtual void exitAssignment(textworldParser::AssignmentContext * /*ctx*/) override { }
 

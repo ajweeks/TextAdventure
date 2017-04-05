@@ -31,6 +31,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitPlayer(textworldParser::PlayerContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitAssignment(textworldParser::AssignmentContext *ctx) override {
     return visitChildren(ctx);
   }

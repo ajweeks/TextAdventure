@@ -27,6 +27,8 @@ public:
 
     virtual antlrcpp::Any visitAction(textworldParser::ActionContext *context) = 0;
 
+    virtual antlrcpp::Any visitPlayer(textworldParser::PlayerContext *context) = 0;
+
     virtual antlrcpp::Any visitAssignment(textworldParser::AssignmentContext *context) = 0;
 
     virtual antlrcpp::Any visitValue(textworldParser::ValueContext *context) = 0;

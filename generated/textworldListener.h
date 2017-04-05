@@ -26,6 +26,9 @@ public:
   virtual void enterAction(textworldParser::ActionContext *ctx) = 0;
   virtual void exitAction(textworldParser::ActionContext *ctx) = 0;
 
+  virtual void enterPlayer(textworldParser::PlayerContext *ctx) = 0;
+  virtual void exitPlayer(textworldParser::PlayerContext *ctx) = 0;
+
   virtual void enterAssignment(textworldParser::AssignmentContext *ctx) = 0;
   virtual void exitAssignment(textworldParser::AssignmentContext *ctx) = 0;
 

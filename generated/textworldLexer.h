@@ -12,8 +12,8 @@
 class  textworldLexer : public antlr4::Lexer {
 public:
   enum {
-    AREA = 1, ITEM = 2, ACTION = 3, LCB = 4, RCB = 5, EQ = 6, SC = 7, ID = 8, 
-    STRING = 9, INT = 10, LIST = 11, WS = 12, COMMENT = 13
+    AREA = 1, ITEM = 2, ACTION = 3, PLAYER = 4, LCB = 5, RCB = 6, EQ = 7, 
+    SC = 8, ID = 9, STRING = 10, INT = 11, WS = 12, COMMA = 13, COMMENT = 14
   };
 
   textworldLexer(antlr4::CharStream *input);
