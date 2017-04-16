@@ -69,17 +69,14 @@ antlrcpp::Any MainVisitor::visitAction(textworldParser::ActionContext* context)
 
 	if (gStringToActionType.find(name) == gStringToActionType.end())
 	{
-		Logger::LogWarning("Unhandled action type " + name);
+		Logger::LogWarning("Action type not found in global string to action map " + name);
 	}
 
 	Action_Type type = gStringToActionType[name];
 	newAction->m_Type = type;
 	const int typeIndex = (int)type;
 	
-	if (typeIndex >= m_World->m_Actions.size())
-	{
-		m_World->m_Actions.resize(typeIndex + 1, nullptr);
-	}
+	assert(typeIndex < m_World->m_Actions.size());
 
 	m_World->m_Actions[typeIndex] = newAction;
 
@@ -123,20 +120,17 @@ antlrcpp::Any MainVisitor::visitAssignment(textworldParser::AssignmentContext* c
 
 antlrcpp::Any MainVisitor::visitValue(textworldParser::ValueContext* context)
 {
-	auto value = context->value();
+	auto values = context->value();
 
-	if (!value.empty())
+	for (size_t i = 0; i < values.size(); i++)
 	{
-		for (size_t i = 0; i < value.size(); i++)
-		{
-			textworldParser::AssignmentContext* castedParent = static_cast<textworldParser::AssignmentContext*>(context->parent);
-			const std::string assignmentTypeStr = castedParent->ID()->getSymbol()->getText();
+		textworldParser::AssignmentContext* castedParent = static_cast<textworldParser::AssignmentContext*>(context->parent);
+		const std::string assignmentTypeStr = castedParent->ID()->getSymbol()->getText();
 
-			std::string assignmentValue = value[i]->getText();
-			RemoveCharFromString(assignmentValue, '"');
+		std::string assignmentValue = values[i]->getText();
+		RemoveCharFromString(assignmentValue, '"');
 
-			AssignParsedValue(assignmentTypeStr, assignmentValue);
-		}
+		AssignParsedValue(assignmentTypeStr, assignmentValue);
 	}
 
 	return visitChildren(context);
@@ -197,9 +191,9 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 			bool foundArea = false;
 			for (size_t i = 0; i < m_NeighborStrings.size(); i++)
 			{
-				if (m_NeighborStrings[i][0].compare(area->m_Name) == 0)
+				if (m_NeighborStrings[i].areaName.compare(area->m_Name) == 0)
 				{
-					m_NeighborStrings[i].push_back(assignmentValue);
+					AddNeighborString(i, assignmentValue);
 					foundArea = true;
 					break;
 				}
@@ -209,8 +203,9 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 			if (!foundArea)
 			{
 				m_NeighborStrings.push_back({});
-				m_NeighborStrings[m_NeighborStrings.size() - 1].push_back(area->m_Name);
-				m_NeighborStrings[m_NeighborStrings.size() - 1].push_back(assignmentValue);
+				const size_t areaIndex = m_NeighborStrings.size() - 1;
+				m_NeighborStrings[areaIndex].areaName = area->m_Name;
+				AddNeighborString(areaIndex, assignmentValue);
 			}
 		}
 		else if (assignmentTypeStr.compare("description") == 0)
@@ -264,23 +259,38 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 	}
 }
 
+void MainVisitor::AddNeighborString(size_t areaIndex, const std::string& neighborName)
+{
+	AreaNeighbor& areaArr = m_NeighborStrings[areaIndex];
+
+	for (size_t i = 0; i < areaArr.neighborNames.size(); ++i)
+	{
+		if (areaArr.neighborNames[i].empty())
+		{
+			areaArr.neighborNames[i] = neighborName;
+			return;
+		}
+	}
+
+	Logger::LogError("Area " + areaArr.areaName + " has too many neighbors (should have 4)", true);
+}
+
 void MainVisitor::PostVisit()
 {
 	assert(m_World->m_Areas.size() == m_NeighborStrings.size());
 
 	for (size_t i = 0; i < m_NeighborStrings.size(); i++)
 	{
-		const std::vector<std::string>& areaNeighborStrings = m_NeighborStrings[i];
+		const AreaNeighbor& areaNeighbor = m_NeighborStrings[i];
 
-		// start at second element - first one is ourself
-		for (size_t j = 1; j < areaNeighborStrings.size(); j++)
+		for (size_t j = 0; j < areaNeighbor.neighborNames.size(); j++)
 		{
-			const std::string& neighborString = areaNeighborStrings[j];
-			const Direction direction = (Direction)(j - 1);
+			const std::string& neighborString = areaNeighbor.neighborNames[j];
+			const Direction direction = (Direction)j;
 
 			if (neighborString.compare("0") == 0)
 			{
-				m_World->m_Areas[i]->m_Neighbors.push_back({ nullptr, Direction::NONE });
+				AddNeighborPair(m_World->m_Areas[i], { nullptr, direction });
 				continue;
 			}
 
@@ -297,13 +307,20 @@ void MainVisitor::PostVisit()
 
 			if (area)
 			{
-				m_World->m_Areas[i]->m_Neighbors.push_back({ area, direction });
+				AddNeighborPair(m_World->m_Areas[i], { area, direction });
 			}
 			else
 			{
-				Logger::LogWarning("Couldn't find neighbor " + neighborString + " in area " + areaNeighborStrings[0] + 
+				Logger::LogWarning("Couldn't find neighbor " + neighborString + " in area " + areaNeighbor.areaName +
 					" (direction: " + DirectionToString(direction) + ")");
 			}
 		}
 	}
+}
+
+void MainVisitor::AddNeighborPair(Area* area, std::pair<Area*, Direction> pair)
+{
+	assert(pair.second != Direction::NONE);
+	assert(area->m_Neighbors[(size_t)pair.second].first == nullptr);
+	area->m_Neighbors[(size_t)pair.second] = pair;
 }

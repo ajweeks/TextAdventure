@@ -4,8 +4,10 @@
 
 #include <map>
 #include <vector>
+#include <array>
 #include <string>
 
+// Forward declarations
 struct Item;
 struct Action;
 struct Area;
@@ -18,13 +20,13 @@ struct World
 	Area* m_CurrentArea;
 	std::vector<Area*> m_Areas;
 	std::vector<Item*> m_Items;
-	std::vector<Action*> m_Actions;
+	std::array<Action*, (size_t)Action_Type::NONE> m_Actions;
 };
 
 struct Area
 {
 	std::string m_Name;
-	std::vector<std::pair<Area*, Direction>> m_Neighbors;
+	std::array<std::pair<Area*, Direction>, 4> m_Neighbors;
 	std::string m_Description;
 	std::vector<Item*> m_Items;
 

@@ -48,7 +48,6 @@ void Area::DescribeNeighbors() const
 	std::cout << std::endl;
 }
 
-
 std::ostream& operator<<(std::ostream& stream, const Item& item)
 {
 	stream << item.m_Name;

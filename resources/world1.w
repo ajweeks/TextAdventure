@@ -81,7 +81,7 @@ action attack {
 
 
 #
-# Items
+# Item definitions
 #
 
 item apple {

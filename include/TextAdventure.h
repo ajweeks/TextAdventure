@@ -5,6 +5,7 @@
 
 #include <vector>
 
+// Forward declarations
 class MainVisitor;
 
 class TextAdventure

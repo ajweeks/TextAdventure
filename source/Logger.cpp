@@ -2,6 +2,7 @@
 #include "Logger.h"
 
 #include <iostream>
+#include <assert.h>
 
 void Logger::LogInfo(const std::string& str)
 {
@@ -13,9 +14,14 @@ void Logger::LogWarning(const std::string& str)
 	Log(str, Level::WARNING);
 }
 
-void Logger::LogError(const std::string& str)
+void Logger::LogError(const std::string& str, bool crash)
 {
 	Log(str, Level::ERROR);
+
+	if (crash)
+	{
+		assert(false);
+	}
 }
 
 void Logger::Log(const std::string& str, Level logLevel)

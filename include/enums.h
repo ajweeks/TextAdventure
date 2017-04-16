@@ -18,6 +18,7 @@ std::string DirectionToString(Direction d);
 std::string DirectionToShortString(Direction d);
 Direction StringToDirection(const std::string& inputString);
 
+// TODO: Meta program this to generate the map automatically
 enum class Action_Type
 {
 	GO,
