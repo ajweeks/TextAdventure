@@ -1,7 +1,9 @@
 
+#include "stdafx.h"
+
 #include "MainVisitor.h"
-#include "helpers.h"
 #include "Logger.h"
+#include "TextAdventure.h"
 
 using namespace antlrcpp;
 
@@ -37,10 +39,10 @@ antlrcpp::Any MainVisitor::visitPlayer(textworldParser::PlayerContext* context)
 antlrcpp::Any MainVisitor::visitItem(textworldParser::ItemContext* context)
 {
 	Item* newItem = new Item();
-	m_World->m_Items.push_back(newItem);
+	TextAdventure::gGlobals.m_ItemDefinitions.push_back(newItem);
 
 	m_LastVisitedType = textworldParser::ITEM;
-	m_LastVisitedIndex = m_World->m_Items.size() - 1;
+	m_LastVisitedIndex = TextAdventure::gGlobals.m_ItemDefinitions.size() - 1;
 
 	return visitChildren(context);
 }
@@ -76,9 +78,9 @@ antlrcpp::Any MainVisitor::visitAction(textworldParser::ActionContext* context)
 	newAction->m_Type = type;
 	const int typeIndex = (int)type;
 	
-	assert(typeIndex < m_World->m_Actions.size());
+	assert(typeIndex < TextAdventure::gGlobals.m_Actions.size());
 
-	m_World->m_Actions[typeIndex] = newAction;
+	TextAdventure::gGlobals.m_Actions[typeIndex] = newAction;
 
 	m_LastVisitedType = textworldParser::ACTION;
 	m_LastVisitedIndex = typeIndex;
@@ -142,11 +144,12 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 	{
 	case textworldParser::ITEM:
 	{
-		Item* item = m_World->m_Items[m_LastVisitedIndex];
+		Item* item = TextAdventure::gGlobals.m_ItemDefinitions[m_LastVisitedIndex];
 
 		if (assignmentTypeStr.compare("name") == 0)
 		{
 			item->m_Name = assignmentValue;
+			ToLower(item->m_Name);
 		}
 		else if (assignmentTypeStr.compare("descriptions") == 0)
 		{
@@ -154,25 +157,31 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 		}
 		else if (assignmentTypeStr.compare("actions") == 0)
 		{
-			Action* action = m_World->m_Actions[(int)gStringToActionType[assignmentValue]];
+			std::string actionClean = assignmentValue;
+			ToLower(actionClean);
+
+			Action* action = TextAdventure::gGlobals.m_Actions[(int)gStringToActionType[actionClean]];
+			assert(action != nullptr);
 			item->m_Actions.push_back(action);
 		}
 		else
 		{
-			Logger::LogWarning("Unhandled assignment type to item in MainVistor: " + assignmentTypeStr + " of " + assignmentValue);
+			Logger::LogWarning("Unhandled assignment type to item: " + assignmentTypeStr + " of " + assignmentValue);
 		}
 	} break;
 	case textworldParser::ACTION:
 	{
-		Action* action = m_World->m_Actions[m_LastVisitedIndex];
+		Action* action = TextAdventure::gGlobals.m_Actions[m_LastVisitedIndex];
 
 		if (assignmentTypeStr.compare("names") == 0)
 		{
-			action->m_Names.push_back(assignmentValue);
+			std::string actionNameClean = assignmentValue;
+			ToLower(actionNameClean);
+			action->m_Names.push_back(actionNameClean);
 		}
 		else
 		{
-			Logger::LogWarning("Unhandled assignment type to action in MainVistor: " + assignmentTypeStr + " of " + assignmentValue);
+			Logger::LogWarning("Unhandled assignment type to action: " + assignmentTypeStr + " of " + assignmentValue);
 		}
 	} break;
 	case textworldParser::AREA:
@@ -182,31 +191,11 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 		if (assignmentTypeStr.compare("name") == 0)
 		{
 			area->m_Name = assignmentValue;
+			ToLower(area->m_Name);
 		}
 		else if (assignmentTypeStr.compare("neighbors") == 0)
 		{
-			// NOTE: Don't store neighbors directly here - there are likely areas
-			// that we are neighbors to that haven't been constructed yet, just store
-			// the vector of strings for now
-			bool foundArea = false;
-			for (size_t i = 0; i < m_NeighborStrings.size(); i++)
-			{
-				if (m_NeighborStrings[i].areaName.compare(area->m_Name) == 0)
-				{
-					AddNeighborString(i, assignmentValue);
-					foundArea = true;
-					break;
-				}
-			}
-
-			// This area hasn't been added to the list of neighbors yet
-			if (!foundArea)
-			{
-				m_NeighborStrings.push_back({});
-				const size_t areaIndex = m_NeighborStrings.size() - 1;
-				m_NeighborStrings[areaIndex].areaName = area->m_Name;
-				AddNeighborString(areaIndex, assignmentValue);
-			}
+			AddNeighborString(area->m_Name, assignmentValue);
 		}
 		else if (assignmentTypeStr.compare("description") == 0)
 		{
@@ -214,17 +203,7 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 		}
 		else if (assignmentTypeStr.compare("items") == 0)
 		{
-			Item* item = nullptr;
-
-			for (size_t i = 0; i < m_World->m_Items.size(); i++)
-			{
-				if (m_World->m_Items[i]->m_Name.compare(assignmentValue) == 0)
-				{
-					item = m_World->m_Items[i];
-					break;
-				}
-			}
-
+			Item* item = GetItemByName(assignmentValue);
 
 			if (item)
 			{
@@ -232,12 +211,12 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 			}
 			else
 			{
-				Logger::LogError("Couldn't find item " + assignmentValue + " in area " + area->m_Name + "!");
+				Logger::LogError("Couldn't find item with name " + assignmentValue);
 			}
 		}
 		else
 		{
-			Logger::LogWarning("Unhandled assignment type to area in MainVistor: " + assignmentTypeStr + " of " + assignmentValue);
+			Logger::LogWarning("Unhandled assignment type to area: " + assignmentTypeStr + " of " + assignmentValue);
 		}
 	} break;
 	case textworldParser::PLAYER:
@@ -248,31 +227,88 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 		}
 		else if (assignmentTypeStr.compare("inventory") == 0)
 		{
-			Item* item;
-			m_World->m_Player->m_Inventory.push_back(item);
+			Item* item = GetItemByName(assignmentValue);
+
+			if (item)
+			{
+				m_World->m_Player->m_Inventory.push_back(item);
+			}
+			else
+			{
+				Logger::LogError("Couldn't find item with name " + assignmentValue);
+			}
 		}
 		else
 		{
-			Logger::LogWarning("Unhandled assignment type to player in MainVistor: " + assignmentTypeStr + " of " + assignmentValue);
+			Logger::LogWarning("Unhandled assignment type to player: " + assignmentTypeStr + " of " + assignmentValue);
 		}
 	} break;
 	}
 }
 
+void MainVisitor::AddNeighborString(const std::string& areaName, const std::string& neighborName)
+{
+	std::string areaNameClean = areaName;
+	ToLower(areaNameClean);
+
+	bool foundArea = false;
+	for (size_t i = 0; i < m_NeighborStrings.size(); i++)
+	{
+		if (m_NeighborStrings[i].areaName.compare(areaNameClean) == 0)
+		{
+			AddNeighborString(i, neighborName);
+			foundArea = true;
+			break;
+		}
+	}
+
+	// This area hasn't been added to the list of neighbors yet
+	if (!foundArea)
+	{
+		m_NeighborStrings.push_back({});
+		const size_t areaIndex = m_NeighborStrings.size() - 1;
+		m_NeighborStrings[areaIndex].areaName = areaNameClean;
+		ToLower(m_NeighborStrings[areaIndex].areaName);
+		AddNeighborString(areaIndex, neighborName);
+	}
+}
+
 void MainVisitor::AddNeighborString(size_t areaIndex, const std::string& neighborName)
 {
+	std::string neighborNameClean = neighborName;
+	ToLower(neighborNameClean);
+
 	AreaNeighbor& areaArr = m_NeighborStrings[areaIndex];
 
 	for (size_t i = 0; i < areaArr.neighborNames.size(); ++i)
 	{
 		if (areaArr.neighborNames[i].empty())
 		{
-			areaArr.neighborNames[i] = neighborName;
+			areaArr.neighborNames[i] = neighborNameClean;
 			return;
 		}
 	}
 
 	Logger::LogError("Area " + areaArr.areaName + " has too many neighbors (should have 4)", true);
+}
+
+Item* MainVisitor::GetItemByName(const std::string& itemName)
+{
+	Item* result = nullptr;
+
+	std::string itemNameClean = itemName;
+	ToLower(itemNameClean);
+
+	for (size_t i = 0; i < TextAdventure::gGlobals.m_ItemDefinitions.size(); i++)
+	{
+		if (TextAdventure::gGlobals.m_ItemDefinitions[i]->m_Name.compare(itemNameClean) == 0)
+		{
+			result = TextAdventure::gGlobals.m_ItemDefinitions[i];
+			break;
+		}
+	}
+
+	return result;
 }
 
 void MainVisitor::PostVisit()

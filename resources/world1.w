@@ -3,12 +3,12 @@
 # Actions
 #
 
-action inspect {
-	names = { "inspect", "study", "examine" };
+action go {
+	names = { "go", "move", "walk", "run" };
 }
 
 action help {
-	names = { "help" };
+	names = { "help", "?" };
 }
 
 action commands {
@@ -27,36 +27,8 @@ action drop {
 	names = { "drop" };
 }
 
-action speak {
-	names = { "speak" };
-}
-
-action enter {
-	names = { "enter" };
-}
-
-action exit {
-	names = { "exit" };
-}
-
-action go {
-	names = { "go", "move", "walk", "run" };
-}
-
 action equip {
 	names = { "equip" };
-}
-
-action give {
-	names = { "give", "gift" };
-}
-
-action look {
-	names = { "look", "look at", "watch" };
-}
-
-action throw {
-	names = { "throw", "huck", "chuck", "hurl" };
 }
 
 action eat {
@@ -67,16 +39,48 @@ action drink {
 	names = { "drink", "glug", "slurp", "chug" };
 }
 
-action read {
-	names = { "read" };
-}
-
 action trade {
 	names = { "trade", "swap" };
 }
 
+action give {
+	names = { "give", "gift" };
+}
+
+action speak {
+	names = { "speak" };
+}
+
+action look {
+	names = { "look", "look at", "watch" };
+}
+
+action inspect {
+	names = { "inspect", "study", "examine" };
+}
+
+action read {
+	names = { "read" };
+}
+
 action attack {
 	names = { "attack" };
+}
+
+action throw {
+	names = { "throw", "huck", "chuck", "hurl" };
+}
+
+action yes {
+	names = { "yes", "y" };
+}
+
+action no {
+	names = { "no", "n" };
+}
+
+action quit {
+	names = { "quit", "exit" };
 }
 
 
@@ -94,6 +98,12 @@ item apple {
 	actions = { "eat" };
 }
 
+item cheese_block {
+	name = "cheese block";
+	descriptions = { "A block of emmental cheese" };
+	actions = { "eat" };
+}
+
 item map {
 	name = "map";
 	descriptions = { "A map" };
@@ -105,30 +115,30 @@ item map {
 # Areas
 #
 
-area mainArea {
-	name = "Main Area";
+area Bedroom {
+	name = "Bedroom";
 	neighbors = { "0", "Area 2", "Area 3", "Area 4" };
-	description = "Main Area desc";
+	description = "Bedroom desc";
 	items = { "apple" };
 }
 
 area Area2 {
 	name = "Area 2";
-	neighbors = { "0", "0", "Area 5", "Main Area" };
+	neighbors = { "0", "0", "Area 5", "Bedroom" };
 	description = "Area 2 desc";
 	items = { "apple" };
 }
 
 area Area3 {
 	name = "Area 3";
-	neighbors = { "Main Area", "Area 5", "0", "0" };
+	neighbors = { "Bedroom", "Area 5", "0", "0" };
 	description = "Area 3 desc";
 	items = { "apple" };
 }
 
 area Area4 {
 	name = "Area 4";
-	neighbors = { "0", "Main Area", "0", "0" };
+	neighbors = { "0", "Bedroom", "0", "0" };
 	description = "Area 4 desc";
 	items = { "apple" };
 }
@@ -145,6 +155,6 @@ area Area5 {
 #
 
 player Player {
-	name = "Player name";
+	name = "Lancelot";
 	inventory = "cheese block";
 }

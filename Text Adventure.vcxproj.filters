@@ -36,15 +36,6 @@
     <ClCompile Include="generated\textworldVisitor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\helpers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\structs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\enums.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\TextAdventure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,6 +46,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\IO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,12 +77,6 @@
     <ClInclude Include="include\MainVisitor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\enums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\helpers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="generated\textworldBaseListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -104,9 +95,6 @@
     <ClInclude Include="generated\textworldVisitor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\structs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\TextAdventure.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -114,6 +102,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\IO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

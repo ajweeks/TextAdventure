@@ -1,7 +1,5 @@
 #pragma once
 
-#include "structs.h"
-
 #include "textworldBaseVisitor.h"
 
 #include <vector>
@@ -28,8 +26,11 @@ public:
 private:
 	void AssignParsedValue(const std::string& assignmentTypeStr, const std::string& assignmentValue);
 
+	void AddNeighborString(const std::string& areaName, const std::string& neighborName);
 	void AddNeighborString(size_t areaIndex, const std::string& neighborName);
 	void AddNeighborPair(Area* area, std::pair<Area*, Direction> pair);
+
+	Item* GetItemByName(const std::string& itemName);
 
 	int m_LastVisitedType; // Stores the last visited type (area, item, action, etc.)
 	int m_LastVisitedIndex;

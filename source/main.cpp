@@ -2,6 +2,8 @@
 // 2DAE1
 // AJ Weeks
 
+#include "stdafx.h"
+
 #include "TextAdventure.h"
 
 #include <string>

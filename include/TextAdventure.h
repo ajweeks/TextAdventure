@@ -1,11 +1,7 @@
 #pragma once
 
-#include "enums.h"
-#include "structs.h"
-
 #include <vector>
 
-// Forward declarations
 class MainVisitor;
 
 class TextAdventure
@@ -14,14 +10,17 @@ public:
 	TextAdventure();
 
 	void Run(const std::string& worldFilePath);
+	
+	static Globals gGlobals;
 
 private:
 	void PlayGame();
-	ApplyInputResult ApplyInput(World* world, const ParsedInput& parsedInput);
-	ParsedInput ParseInput(const std::string& input);
+	void PopulateWordWhitelist();
 
-	void PrintInvalidInputMessage(const ParsedInput& parsedInput, const ApplyInputResult& inputResult);
-	std::string RemoveExtraWordsFromRemainingInput(std::string& remainingString);
+	ParsedInput ParseInput(const std::string& input);
+	void ApplyInput(ParsedInput& parsedInput);
+
+	void PrintInvalidInputMessage(const ParsedInput& parsedInput);
 
 	MainVisitor* m_Visitor;
 
