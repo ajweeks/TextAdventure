@@ -34,5 +34,5 @@ void Logger::Log(const std::string& str, Level logLevel)
 	else if (logLevel == Level::ERROR) prefix = "[ERROR]: ";
 	else if (logLevel == Level::WARNING) prefix = "[WARNING]: ";
 
-	std::cout << prefix << str << std::endl;
+	std::cout << prefix << str << '\n';
 }

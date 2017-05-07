@@ -24,7 +24,9 @@ using namespace antlr4;
 
 Globals TextAdventure::gGlobals = {};
 
-TextAdventure::TextAdventure()
+TextAdventure::TextAdventure() :
+	m_QuitMessage(false),
+	m_Playing(true)
 {
 }
 
@@ -84,16 +86,11 @@ void TextAdventure::Run(const std::string& worldFilePath)
 
 		PopulateWordWhitelist();
 
-		std::string response;
-		do
-		{
-			PlayGame();
-			IO::OutputString("Play again? (y/n)");
-		} while (response.at(0) == 'y' || response.at(0) == 'Y');
+		PlayGame();
 
-		IO::OutputString("Enter any character to exit...");
-		std::string s;
-		std::getline(std::cin, s);
+		//IO::OutputString("Enter any character to exit...");
+		//std::string s;
+		//std::getline(std::cin, s);
 	}
 }
 
@@ -106,8 +103,7 @@ void TextAdventure::PlayGame()
 
 	bool describeArea = true;
 
-	bool playing = true;
-	while (playing)
+	while (m_Playing)
 	{
 		if (describeArea)
 		{
@@ -122,6 +118,11 @@ void TextAdventure::PlayGame()
 			if (!parsedInput.m_Success)
 			{
 				PrintInvalidInputMessage(parsedInput);
+
+				if (!m_Playing)
+				{
+					return;
+				}
 			}
 
 			std::string input;
@@ -224,8 +225,7 @@ ParsedInput TextAdventure::ParseInput(const std::string& input)
 				}
 				else
 				{
-					Logger::LogInfo("Unhandled white list word parsed in: " + removedWord);
-					result.m_Extra.append(removedWord);
+					result.m_NounString = removedWord;
 				}
 
 				break;
@@ -282,7 +282,24 @@ void TextAdventure::ApplyInput(ParsedInput& parsedInput)
 		}
 		else
 		{
-			parsedInput.m_ErrorMessage = "That's not a valid area name!";
+			bool validAreaName = false;
+			for (size_t i = 0; i < m_Visitor->m_World->m_Areas.size(); i++)
+			{
+				if (m_Visitor->m_World->m_Areas[i]->m_Name.compare(parsedInput.m_NounString) == 0)
+				{
+					validAreaName = true;
+					break;
+				}
+			}
+
+			if (validAreaName)
+			{
+				parsedInput.m_ErrorMessage = "You can't reach that room from here!";
+			}
+			else
+			{
+				parsedInput.m_ErrorMessage = "That's not a valid area name!";
+			}
 		}
 	} break;
 	case Action_Type::INVENTORY:
@@ -319,7 +336,8 @@ void TextAdventure::ApplyInput(ParsedInput& parsedInput)
 	{
 		if (parsedInput.m_Item != nullptr)
 		{
-			std::string itemDescription = parsedInput.m_Item->m_Descriptions[0];
+			int descIndex = rand() % parsedInput.m_Item->m_Descriptions.size();
+			std::string itemDescription = parsedInput.m_Item->m_Descriptions[descIndex];
 
 			IO::OutputString(itemDescription);
 
@@ -355,6 +373,9 @@ void TextAdventure::ApplyInput(ParsedInput& parsedInput)
 			parsedInput.m_ErrorMessage = "That item isn't in this area";
 		}
 	} break;
+	case Action_Type::OPEN:
+
+		break;
 	case Action_Type::READ:
 		break;
 	case Action_Type::ATTACK:
@@ -405,6 +426,7 @@ void TextAdventure::PrintInvalidInputMessage(const ParsedInput& parsedInput)
 	case Action_Type::READ:
 	case Action_Type::ATTACK:
 	case Action_Type::THROW:
+	case Action_Type::OPEN:
 	{
 		IO::OutputString(defaultWarningString);
 	} break;
@@ -431,13 +453,30 @@ void TextAdventure::PrintInvalidInputMessage(const ParsedInput& parsedInput)
 	} break;
 	case Action_Type::QUIT:
 	{
-		IO::OutputString("Are you sure you want to quit?");
+		if (m_QuitMessage)
+		{
+			m_Playing = false;
+		}
+		else
+		{
+			m_QuitMessage = true;
+			IO::OutputString("Are you sure you want to quit?");
+		}
 	} break;
 
 	case Action_Type::INVENTORY:
+		break;
 	case Action_Type::YES:
+		if (m_QuitMessage)
+		{
+			m_Playing = false;
+		}
+		break;
 	case Action_Type::NO:
-		// No warning message for these commands
+		if (m_QuitMessage)
+		{
+			m_QuitMessage = false;
+		}
 		break;
 
 	case Action_Type::NONE:

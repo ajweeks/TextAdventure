@@ -35,6 +35,11 @@ Available commands:
 	
 ---
 You walk to the left, the auditorium is probably that direction, since that's the way the figure went earlier. You walk for minutes before seeing anything new. The entire way you see seemingly identical doors, one after another, and the only sound you hear is an almost silent buzzing sound coming from tiny round speakers placed above every door. You eventually come to the end of the hallway. You're confronted with a set of large double-doors, with a label above them "Wing 0".
+
+OR
+
+You walk to the right. Even though the figure from before seemed to go to the left, he's probably not going to the auditorium. You walk for what feels like 10 minutes, passing by dozens of identical doors, along a slightly curved hallway. Eventually you reach a set of doors with a sign on them saying "Empoloyees only". You try the doors anyway - no budge.
+
 ---
 
 Available commands:
@@ -50,7 +55,11 @@ Available commands:
 	Walk over to other doors
 	
 ---
+You walk up to the window and look out to see an endless sea. You appear to be hundreds of meters above it. Where could you possibly be?
 
+OR
+
+You walk across the large room towards the other door. But before you can get there, you hear a loud siren begin to blare. You frantically scan the room, but there is nothing. You run to the other side.
 ---
 
 

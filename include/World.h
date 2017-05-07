@@ -48,6 +48,7 @@ enum class Action_Type
 	YES,
 	NO,
 	QUIT,
+	OPEN,
 
 	NONE
 };
@@ -73,6 +74,7 @@ static std::map<std::string, Action_Type> gStringToActionType = {
 	{ "no", Action_Type::NO },
 	{ "drink", Action_Type::DRINK },
 	{ "quit", Action_Type::QUIT },
+	{ "open", Action_Type::OPEN },
 };
 
 struct Globals
@@ -101,6 +103,7 @@ struct Area
 	void RemoveItem(Item* item);
 	void AddItem(Item* item);
 	void Describe() const;
+	void DescribeArea() const;
 	void DescribeItems()const;
 	void DescribeNeighbors() const;
 };
@@ -110,7 +113,6 @@ struct Action
 	Action_Type m_Type;
 	std::vector<std::string> m_Names;
 };
-std::ostream& operator<<(std::ostream& stream, const Area& area);
 
 struct Item
 {
@@ -118,7 +120,6 @@ struct Item
 	std::vector<std::string> m_Descriptions;
 	std::vector<Action*> m_Actions;
 };
-std::ostream& operator<<(std::ostream& stream, const Item& item);
 
 struct Player
 {
@@ -158,6 +159,7 @@ void RemoveWhiteSpaces(std::string& str);
 void RemoveLeadingAndTrailingWhiteSpaces(std::string& str);
 void RemoveCharFromString(std::string& str, char character);
 
+std::vector<std::string> Split(const std::string& values, std::string delim);
 std::vector<std::string> Split(const std::string& values, char delim = '\n');
 std::string Combine(const std::vector<std::string>& vals, char delim = ' ');
 

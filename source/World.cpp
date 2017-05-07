@@ -24,62 +24,61 @@ void Area::RemoveItem(Item* item)
 
 void Area::AddItem(Item* item)
 {
+	m_Items.push_back(item);
 }
 
 void Area::Describe() const
 {
-	std::cout << std::endl << "You are in " << m_Name << std::endl;
+	IO::OutputNewLine();
+	IO::OutputString("You are in " + m_Name);
 
+	DescribeArea();
+	IO::OutputNewLine();
+	
 	DescribeItems();
+	IO::OutputNewLine();
+	
 	DescribeNeighbors();
+	IO::OutputNewLine();
+}
 
-	std::cout << std::endl;
+void Area::DescribeArea() const
+{
+	IO::OutputString(m_Description);
 }
 
 void Area::DescribeItems() const
 {
 	if (m_Items.empty())
 	{
-		std::cout << "There is nothing in this area" << std::endl;
+		IO::OutputString("There is nothing in this area");
 		return;
 	}
-	std::cout << "In this area you find: " << std::endl;
+	IO::OutputString("In this area you find: ");
 	for (size_t i = 0; i < m_Items.size(); i++)
 	{
-		if (i > 0) std::cout << ", ";
-		std::cout << m_Items[i]->m_Name;
+		if (i > 0) IO::OutputString(", ", false);
+		IO::OutputString(m_Items[i]->m_Name, false);
 	}
-	std::cout << std::endl;
+	IO::OutputNewLine();
 }
 
 void Area::DescribeNeighbors() const
 {
 	assert(!m_Neighbors.empty());
 
-	std::cout << "You can go to: " << std::endl;
+	IO::OutputString("You can go to: ");
 	int placeCount = 0;
 	for (size_t i = 0; i < m_Neighbors.size(); i++)
 	{
 		if (m_Neighbors[i].first)
 		{
-			if (placeCount > 0) std::cout << ", ";
-			std::cout << *(m_Neighbors[i].first) << " (" << DirectionToShortString(m_Neighbors[i].second) << ")";
+			if (placeCount > 0) IO::OutputString(", ", false);
+			IO::OutputString(((m_Neighbors[i].first)->m_Name) + " (" + DirectionToShortString(m_Neighbors[i].second) + ")", false);
 			++placeCount;
 		}
 	}
-	std::cout << std::endl;
-}
-
-std::ostream& operator<<(std::ostream& stream, const Item& item)
-{
-	stream << item.m_Name;
-	return stream;
-}
-
-std::ostream& operator<<(std::ostream& stream, const Area& area)
-{
-	stream << area.m_Name;
-	return stream;
+	IO::OutputNewLine();
 }
 
 std::string DirectionToString(Direction d)
@@ -143,6 +142,39 @@ void RemoveCharFromString(std::string& str, char character)
 	str.erase(std::remove_if(str.begin(), str.end(), [&character](char c) { return c == character; }), str.end());
 }
 
+std::vector<std::string> Split(const std::string& values, std::string delim)
+{
+	std::vector<std::string> result;
+	std::stringstream stream(values);
+
+	while (stream.good())
+	{
+		std::string line;
+		getline(stream, line);
+
+		result.push_back(line);
+	}
+
+	int i = 0;
+	while (i < result.size())
+	{
+		size_t find;
+		do
+		{
+			find = result[i].find(delim);
+
+			if (find != std::string::npos)
+			{
+				result.insert(result.begin() + i + 1, result[i].substr(find + delim.length()));
+				result[i] = result[i].substr(0, find);
+			}
+		} while (find != std::string::npos);
+		++i;
+	}
+
+	return result;
+}
+
 std::vector<std::string> Split(const std::string& values, char delim)
 {
 	std::vector<std::string> result;
@@ -184,7 +216,7 @@ void ClearConsole()
 std::string Player::DescribeInventory() const
 {
 	std::stringstream ss;
-	ss << "Player's inventory contains: " << std::endl;
+	ss << "Player's inventory contains: " << '\n';
 	int placeCount = 0;
 	for (size_t i = 0; i < m_Inventory.size(); i++)
 	{
@@ -192,7 +224,7 @@ std::string Player::DescribeInventory() const
 		ss << m_Inventory[i]->m_Name;
 		++placeCount;
 	}
-	ss << std::endl;
+	ss << '\n';
 
 	return ss.str();
 }

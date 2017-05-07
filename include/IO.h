@@ -11,7 +11,7 @@ public:
 	static std::string InputLine();
 
 	// Output
-	static void OutputString(const std::string& str);
+	static void OutputString(const std::string& str, bool newline = true);
 	static void OutputNewLine();
 
 private:

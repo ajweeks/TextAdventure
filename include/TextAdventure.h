@@ -24,4 +24,6 @@ private:
 
 	MainVisitor* m_Visitor;
 
+	bool m_Playing;
+	bool m_QuitMessage;
 };

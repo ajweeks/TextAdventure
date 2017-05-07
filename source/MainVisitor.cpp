@@ -218,7 +218,7 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 		{
 			Logger::LogWarning("Unhandled assignment type to area: " + assignmentTypeStr + " of " + assignmentValue);
 		}
-	} break;
+		} break;
 	case textworldParser::PLAYER:
 	{
 		if (assignmentTypeStr.compare("name") == 0)
@@ -358,5 +358,7 @@ void MainVisitor::AddNeighborPair(Area* area, std::pair<Area*, Direction> pair)
 {
 	assert(pair.second != Direction::NONE);
 	assert(area->m_Neighbors[(size_t)pair.second].first == nullptr);
+	if (pair.first) assert(pair.first->m_Name.compare(area->m_Name) != 0);
+
 	area->m_Neighbors[(size_t)pair.second] = pair;
 }
