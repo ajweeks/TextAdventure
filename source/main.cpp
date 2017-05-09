@@ -18,7 +18,7 @@
 int main(int argc, const char* argv[])
 {
 #if defined(DEBUG) || defined(_DEBUG)
-	//_CrtSetBreakAlloc(18);
+	//_CrtSetBreakAlloc(594);
 #endif
 
 	TextAdventure* game = new TextAdventure();
