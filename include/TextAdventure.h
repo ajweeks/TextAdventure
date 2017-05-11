@@ -9,16 +9,16 @@ class TextAdventure
 public:
 	TextAdventure();
 
-	void Run(const std::string& worldFilePath);
+	void Run(const std::string& worldFilePath) ;
 	
 	static Globals gGlobals;
 
 private:
 	void PlayGame();
-	void PopulateWordWhitelist();
+	void PopulateWordWhitelist() const;
 
-	ParsedInput ParseInput(const std::string& input);
-	void ApplyInput(ParsedInput& parsedInput);
+	ParsedInput ParseInput(const std::string& input) const;
+	void ApplyInput(ParsedInput& parsedInput) const;
 
 	void PrintInvalidInputMessage(const ParsedInput& parsedInput);
 

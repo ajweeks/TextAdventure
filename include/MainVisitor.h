@@ -19,7 +19,7 @@ public:
 	virtual antlrcpp::Any visitValue(textworldParser::ValueContext* context) override;
 	virtual antlrcpp::Any visitAssignment(textworldParser::AssignmentContext* context) override;
 
-	void PostVisit();
+	void PostVisit() const;
 
 	World* m_World = nullptr;
 
@@ -28,9 +28,9 @@ private:
 
 	void AddNeighborString(const std::string& areaName, const std::string& neighborName);
 	void AddNeighborString(size_t areaIndex, const std::string& neighborName);
-	void AddNeighborPair(Area* area, std::pair<Area*, Direction> pair);
+	void AddNeighborPair(Area* area, std::pair<Area*, Direction> pair) const;
 
-	Item* GetItemByName(const std::string& itemName);
+	Item* GetItemByName(const std::string& itemName) const;
 
 	int m_LastVisitedType; // Stores the last visited type (area, item, action, etc.)
 	int m_LastVisitedIndex;

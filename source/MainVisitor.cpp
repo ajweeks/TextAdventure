@@ -99,7 +99,7 @@ antlrcpp::Any MainVisitor::visitAssignment(textworldParser::AssignmentContext* c
 
 		if (str.find("\n") != std::string::npos)
 		{
-			std::vector<std::string> strings = Split(str);
+			const std::vector<std::string> strings = Split(str);
 			for (size_t i = 0; i < strings.size(); i++)
 			{
 				const std::string assignmentValue = strings[i];
@@ -122,7 +122,7 @@ antlrcpp::Any MainVisitor::visitAssignment(textworldParser::AssignmentContext* c
 
 antlrcpp::Any MainVisitor::visitValue(textworldParser::ValueContext* context)
 {
-	auto values = context->value();
+	const auto values = context->value();
 
 	for (size_t i = 0; i < values.size(); i++)
 	{
@@ -292,7 +292,7 @@ void MainVisitor::AddNeighborString(size_t areaIndex, const std::string& neighbo
 	Logger::LogError("Area " + areaArr.areaName + " has too many neighbors (should have 4)", true);
 }
 
-Item* MainVisitor::GetItemByName(const std::string& itemName)
+Item* MainVisitor::GetItemByName(const std::string& itemName) const
 {
 	Item* result = nullptr;
 
@@ -311,7 +311,7 @@ Item* MainVisitor::GetItemByName(const std::string& itemName)
 	return result;
 }
 
-void MainVisitor::PostVisit()
+void MainVisitor::PostVisit() const
 {
 	assert(m_World->m_Areas.size() == m_NeighborStrings.size());
 
@@ -354,7 +354,7 @@ void MainVisitor::PostVisit()
 	}
 }
 
-void MainVisitor::AddNeighborPair(Area* area, std::pair<Area*, Direction> pair)
+void MainVisitor::AddNeighborPair(Area* area, std::pair<Area*, Direction> pair) const
 {
 	assert(pair.second != Direction::NONE);
 	assert(area->m_Neighbors[(size_t)pair.second].first == nullptr);

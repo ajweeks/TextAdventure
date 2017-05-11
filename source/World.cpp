@@ -11,7 +11,7 @@
 
 void Area::RemoveItem(Item* item)
 {
-	auto it = std::find(m_Items.begin(), m_Items.end(), item);
+	const auto it = std::find(m_Items.begin(), m_Items.end(), item);
 	if (it == m_Items.end())
 	{
 		Logger::LogError("Can't delete item " + item->m_Name + ", it doesn't exist in this area!");
