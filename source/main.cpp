@@ -22,13 +22,11 @@ int main(int argc, const char* argv[])
 #endif
 
 	TextAdventure* game = new TextAdventure();
+	game->Run("resources/world1.w");
 
-	const std::string worldFilePath = argv[1];
-	game->Run(worldFilePath);
+	delete game;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	_CrtDumpMemoryLeaks();
 #endif 
-
-	delete game;
 }

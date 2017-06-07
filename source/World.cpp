@@ -155,7 +155,7 @@ std::vector<std::string> Split(const std::string& values, std::string delim)
 		result.push_back(line);
 	}
 
-	int i = 0;
+	size_t i = 0;
 	while (i < result.size())
 	{
 		size_t find;
@@ -213,18 +213,63 @@ void ClearConsole()
 	system("CLS");
 }
 
-std::string Player::DescribeInventory() const
+std::vector<Item*>::const_iterator Player::IsItemInInventory(Item* item)
 {
-	std::stringstream ss;
-	ss << "Player's inventory contains: " << '\n';
-	int placeCount = 0;
 	for (size_t i = 0; i < m_Inventory.size(); i++)
 	{
-		if (placeCount > 0) ss << ", ";
-		ss << m_Inventory[i]->m_Name;
-		++placeCount;
+		if (m_Inventory[i] == item)
+		{
+			return m_Inventory.begin() + i;
+		}
 	}
-	ss << '\n';
 
-	return ss.str();
+	return m_Inventory.end();
+}
+
+void Player::RemoveItemFromInventory(std::vector<Item*>::const_iterator iter)
+{
+	assert(iter >= m_Inventory.begin() && iter < m_Inventory.end());
+	m_Inventory.erase(iter);
+}
+
+void Player::RemoveItemFromInventory(Item* item)
+{
+	for (size_t i = 0; i < m_Inventory.size(); i++)
+	{
+		if (m_Inventory[i] == item)
+		{
+			m_Inventory.erase(m_Inventory.begin() + i);
+			return;
+		}
+	}
+
+	Logger::LogError("Couldn't remove item from player inventory: " + item->m_Name);
+}
+
+void Player::AddItemToInventory(Item* item)
+{
+	m_Inventory.push_back(item);
+}
+
+std::string Player::DescribeInventory() const
+{
+	if (m_Inventory.empty())
+	{
+		return "Player's inventory is empty!";
+	}
+	else
+	{
+		std::stringstream ss;
+		ss << "Player's inventory contains: " << '\n';
+		int placeCount = 0;
+		for (size_t i = 0; i < m_Inventory.size(); i++)
+		{
+			if (placeCount > 0) ss << ", ";
+			ss << m_Inventory[i]->m_Name;
+			++placeCount;
+		}
+		ss << '\n';
+
+		return ss.str();
+	}
 }

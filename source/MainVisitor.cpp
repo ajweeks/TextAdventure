@@ -155,6 +155,10 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 		{
 			item->m_Descriptions.push_back(assignmentValue);
 		}
+		else if (assignmentTypeStr.compare("requiredItems") == 0)
+		{
+			item->m_RequiredItems.push_back(GetItemByName(assignmentValue));
+		}
 		else if (assignmentTypeStr.compare("actions") == 0)
 		{
 			std::string actionClean = assignmentValue;
@@ -163,6 +167,10 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 			Action* action = TextAdventure::gGlobals.m_Actions[(int)gStringToActionType[actionClean]];
 			assert(action != nullptr);
 			item->m_Actions.push_back(action);
+		}
+		else if (assignmentTypeStr.compare("onSuccessDescriptions") == 0)
+		{
+			item->m_OnSuccessDescriptions.push_back(assignmentValue);
 		}
 		else
 		{
@@ -213,6 +221,10 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 			{
 				Logger::LogError("Couldn't find item with name " + assignmentValue);
 			}
+		}
+		else if (assignmentTypeStr.compare("onSuccessArea") == 0)
+		{
+			m_NeighborStrings[m_LastVisitedIndex].onSuccessAreaName = assignmentValue;
 		}
 		else
 		{
@@ -311,6 +323,25 @@ Item* MainVisitor::GetItemByName(const std::string& itemName) const
 	return result;
 }
 
+Area* MainVisitor::GetAreaByName(const std::string & areaName) const
+{
+	Area* result = nullptr;
+
+	std::string areaNameClean = areaName;
+	ToLower(areaNameClean);
+
+	for (size_t i = 0; i < m_World->m_Areas.size(); i++)
+	{
+		if (m_World->m_Areas[i]->m_Name.compare(areaNameClean) == 0)
+		{
+			result = m_World->m_Areas[i];
+			break;
+		}
+	}
+
+	return result;
+}
+
 void MainVisitor::PostVisit() const
 {
 	assert(m_World->m_Areas.size() == m_NeighborStrings.size());
@@ -318,6 +349,11 @@ void MainVisitor::PostVisit() const
 	for (size_t i = 0; i < m_NeighborStrings.size(); i++)
 	{
 		const AreaNeighbor& areaNeighbor = m_NeighborStrings[i];
+
+		if (!areaNeighbor.onSuccessAreaName.empty())
+		{
+			m_World->m_Areas[i]->m_OnSuccessArea = GetAreaByName(areaNeighbor.onSuccessAreaName);
+		}
 
 		for (size_t j = 0; j < areaNeighbor.neighborNames.size(); j++)
 		{

@@ -96,7 +96,7 @@ void TextAdventure::Run(const std::string& worldFilePath)
 
 void TextAdventure::PlayGame()
 {
-	IO::OutputString("Welcome to GAME_NAME!");
+	IO::OutputString("Welcome to Pondania!");
 	IO::OutputString("");
 
 	bool describeArea = true;
@@ -131,8 +131,23 @@ void TextAdventure::PlayGame()
 			ApplyInput(parsedInput);
 		} while (!parsedInput.m_Success);
 
-
 		describeArea = parsedInput.m_DescribeAreaAgain;
+
+		if (!parsedInput.m_SuccessText.empty())
+		{
+			IO::OutputString(parsedInput.m_SuccessText);
+		}
+
+		if (m_Visitor->m_World->m_CurrentArea->m_Name.compare("escape hatch") == 0)
+		{
+			// The player escaped! Game oversq	qqqqqqq
+			m_Playing = false;
+
+			m_Visitor->m_World->m_CurrentArea->Describe();
+
+			IO::OutputString("Thank you for playing! Press any key to exit ...");
+			IO::InputLine();
+		}
 
 		//ClearConsole();
 	}
@@ -166,15 +181,30 @@ ParsedInput TextAdventure::ParseInput(const std::string& input) const
 
 				// Find out if word is an action
 				const auto actionIt = std::find_if(gGlobals.m_Actions.begin(), gGlobals.m_Actions.end(),
-					[&removedWord](Action* action) { return Contains(action->m_Names, removedWord); });
-				//auto actionIt = gStringToActionType.find(removedWord);
+					[&removedWord](const Action* action) 
+					{ 
+						return Contains(action->m_Names, removedWord); 
+					});
 				
-				const auto areaIt = std::find_if(m_Visitor->m_World->m_CurrentArea->m_Neighbors.begin(), m_Visitor->m_World->m_CurrentArea->m_Neighbors.end(),
-					[&removedWord](std::pair<Area*, Direction> pair) { return pair.first ? pair.first->m_Name.compare(removedWord) == 0 : false; });
+				Area* const currentArea = m_Visitor->m_World->m_CurrentArea;
+				const auto areaIt = std::find_if(currentArea->m_Neighbors.begin(), currentArea->m_Neighbors.end(),
+					[&removedWord](const std::pair<Area*, Direction>& pair) 
+					{ 
+						return pair.first ? pair.first->m_Name.compare(removedWord) == 0 : false; 
+					});
 				
-				const auto itemIt = std::find_if(m_Visitor->m_World->m_CurrentArea->m_Items.begin(), m_Visitor->m_World->m_CurrentArea->m_Items.end(),
-					[&removedWord](Item* item) { return item->m_Name.compare(removedWord) == 0; });
-				
+				const auto areaItemIt = std::find_if(currentArea->m_Items.begin(), currentArea->m_Items.end(), 
+					[&removedWord](const Item* const item)
+					{
+						return item->m_Name.compare(removedWord) == 0;
+					});
+
+				const auto inventoryItemIt = std::find_if(m_Visitor->m_World->m_Player->m_Inventory.begin(), m_Visitor->m_World->m_Player->m_Inventory.end(),
+					[&removedWord](const Item* const item)
+					{
+						return item->m_Name.compare(removedWord) == 0;
+					});
+
 				const Direction direction = StringToDirection(removedWord);
 
 				if (actionIt != gGlobals.m_Actions.end())
@@ -192,11 +222,18 @@ ParsedInput TextAdventure::ParseInput(const std::string& input) const
 						result.m_Area = areaIt->first;
 					}
 				}
-				else if (itemIt != m_Visitor->m_World->m_CurrentArea->m_Items.end())
+				else if (areaItemIt != m_Visitor->m_World->m_CurrentArea->m_Items.end())
 				{
 					if (result.m_Item == nullptr)
 					{
-						result.m_Item = (*itemIt);
+						result.m_Item = (*areaItemIt);
+					}
+				}
+				else if (inventoryItemIt != m_Visitor->m_World->m_Player->m_Inventory.end())
+				{
+					if (result.m_Item == nullptr)
+					{
+						result.m_Item = (*inventoryItemIt);
 					}
 				}
 				else if (m_Visitor->m_World->m_CurrentArea->m_Name.compare(removedWord) == 0)
@@ -232,6 +269,10 @@ ParsedInput TextAdventure::ParseInput(const std::string& input) const
 
 	result.m_Extra = inputCopy;
 	RemoveLeadingAndTrailingWhiteSpaces(result.m_Extra);
+	if (result.m_Extra.empty())
+	{
+		result.m_Extra = result.m_NounString;
+	}
 
 	return result;
 }
@@ -300,10 +341,54 @@ void TextAdventure::ApplyInput(ParsedInput& parsedInput) const
 		}
 	} break;
 	case Action_Type::INVENTORY:
+		IO::OutputString(m_Visitor->m_World->m_Player->DescribeInventory());
 		break;
 	case Action_Type::TAKE:
-		break;
+	{
+		if (parsedInput.m_Item)
+		{
+			bool itemExistsInCurrentArea = false;
+			for (size_t i = 0; i < m_Visitor->m_World->m_CurrentArea->m_Items.size(); i++)
+			{
+				if (m_Visitor->m_World->m_CurrentArea->m_Items[i]->m_Name.compare(parsedInput.m_Item->m_Name) == 0)
+				{
+					itemExistsInCurrentArea = true;
+					break;
+				}
+			}
+
+			if (itemExistsInCurrentArea)
+			{
+				m_Visitor->m_World->m_CurrentArea->RemoveItem(parsedInput.m_Item);
+
+				m_Visitor->m_World->m_Player->m_Inventory.push_back(parsedInput.m_Item);
+				parsedInput.m_SuccessText = "You picked up a " + parsedInput.m_Item->m_Name;
+				parsedInput.m_Success = true;
+				return;
+			}
+			else
+			{
+				parsedInput.m_ErrorMessage = "That item doesn't exist here!";
+			}
+		}
+	} break;
 	case Action_Type::DROP:
+		if (parsedInput.m_Item)
+		{
+			Player* player = m_Visitor->m_World->m_Player;
+			
+			auto iter = player->IsItemInInventory(parsedInput.m_Item);
+			if (iter != player->m_Inventory.end())
+			{
+				parsedInput.m_Success = true;
+				parsedInput.m_DescribeAreaAgain = true;
+
+				player->RemoveItemFromInventory(iter);
+				m_Visitor->m_World->m_CurrentArea->AddItem(parsedInput.m_Item);
+
+				return;
+			}
+		}
 		break;
 	case Action_Type::EQUIP:
 		break;
@@ -368,8 +453,49 @@ void TextAdventure::ApplyInput(ParsedInput& parsedInput) const
 		}
 	} break;
 	case Action_Type::OPEN:
+	{
+		if (parsedInput.m_Item)
+		{
+			if (parsedInput.m_Item->m_Name.compare("locked doors") == 0)
+			{
+				if (!parsedInput.m_Item->m_RequiredItems.empty())
+				{
+					bool success = true;
+					const std::vector<Item*>& inventory = m_Visitor->m_World->m_Player->m_Inventory;
+					
+					if (inventory.size() < parsedInput.m_Item->m_RequiredItems.size())
+					{
+						success = false;
+					}
+					else
+					{
+						for (size_t i = 0; i < inventory.size(); i++)
+						{
+							if (!Contains(inventory, parsedInput.m_Item->m_RequiredItems[i]))
+							{
+								success = false;
+								break;
+							}
+						}
+					}
 
-		break;
+					if (success)
+					{
+						// Unlock the doors
+						parsedInput.m_Item->m_Activated = true;
+						m_Visitor->m_World->m_CurrentArea = m_Visitor->m_World->m_CurrentArea->m_OnSuccessArea;
+						parsedInput.m_DescribeAreaAgain = true;
+						parsedInput.m_Success = true;
+						return;
+					}
+					else
+					{
+						parsedInput.m_ErrorMessage = "You can't open " + parsedInput.m_Item->m_Name;
+					}
+				}
+			}
+		}
+	} break;
 	case Action_Type::READ:
 		break;
 	case Action_Type::ATTACK:
@@ -394,6 +520,9 @@ void TextAdventure::PrintInvalidInputMessage(const ParsedInput& parsedInput)
 	std::string remainingStringNoWS = parsedInput.m_Extra;
 	RemoveWhiteSpaces(remainingStringNoWS);
 
+	std::string noun = parsedInput.m_Extra;
+	if (noun.empty()) noun = parsedInput.m_NounString;
+	if (noun.empty()) noun = "that";
 	const std::string defaultWarningString = "Sorry, you can't " + parsedInput.m_InputActionString + " " + parsedInput.m_Extra;
 
 	if (!parsedInput.m_Action)
@@ -420,9 +549,12 @@ void TextAdventure::PrintInvalidInputMessage(const ParsedInput& parsedInput)
 	case Action_Type::READ:
 	case Action_Type::ATTACK:
 	case Action_Type::THROW:
-	case Action_Type::OPEN:
 	{
 		IO::OutputString(defaultWarningString);
+	} break;
+	case Action_Type::OPEN:
+	{
+		IO::OutputString(parsedInput.m_ErrorMessage);
 	} break;
 	case Action_Type::LOOK:
 	{

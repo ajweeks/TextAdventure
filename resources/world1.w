@@ -16,11 +16,11 @@ action commands {
 }
 
 action inventory {
-	names = { "inventory", "e" };
+	names = { "inventory" };
 }
 
 action take {
-	names = { "take" };
+	names = { "take", "pick up" };
 }
 
 action drop {
@@ -72,11 +72,11 @@ action throw {
 }
 
 action yes {
-	names = { "yes", "y" };
+	names = { "yes" };
 }
 
 action no {
-	names = { "no", "n" };
+	names = { "no" };
 }
 
 action quit {
@@ -106,25 +106,21 @@ item shinyObject {
 	actions = { "eat" };
 }
 
+item goldKey {
+	name = "gold key";
+	descriptions = { "A shiny, heavy, gold-colored key" };
+	# actions = { };
+}
+
 item lockedDoors {
 	name = "locked doors";
 	descriptions = { "You try the doors, but they won't budge.",
 		"You push the doors with all your strength, but the don't move an inch."};
+	requiredItems = { "gold key" };
+	onSuccessDescriptions = { "You insert the key into the keyhole, and with a little wiggle the key turns and makes an audible *click* sound that echos down the hallway. You swing the door open" };
 	actions = { "open", "enter" };
 }
 
-item unlockedDoors {
-	name = "unlocked doors";
-	descriptions = { "You push open the doors.", "You turn the handle and slowly open the door." };
-	actions = { "open", "enter" };
-}
-
-item largeWindows {
-	name = "large windows";
-	descriptions = { "Through the windows you see an immense ocean, far below.", 
-	"You look out the window and see ocean as far as you can see." };
-	actions = { "look" };
-}
 
 
 #
@@ -149,6 +145,15 @@ area DoorsRight {
 	name = "Doors to the right";
 	neighbors = { "0", "0", "Main hallway", "0" };
 	description = "You walk to the right. Even though the figure from before seemed to go to the left, he's probably not going to the auditorium. You walk for what feels like 10 minutes, passing by dozens of identical doors, along a slightly curved hallway. Eventually you reach a set of doors with a sign on them saying 'Empoloyees only'. You try the doors anyway - no budge.";
+	# onSuccessDescription = "test";
+	onSuccessArea = "Escape Hatch";
+	items = { "locked doors" };
+}
+
+area EscapeHatch {
+	name = "Escape hatch";
+	neighbors = { "0", "0", "0", "0" };
+	description = "You enter the room. All you see is an open door to a dense forest. You hear a shout from down the hallway, it's the figure from earlier. He breaks out in a sprint. Your instincts kick in and you turn and run out the door. You run faster than you've ever ran before. You're barefoot, but you don't notice. You think about nothing but escaping. Eventually you turn around again and see nothing. You lost him. And now, you finally take a minute to look around you. Time to find help.\nYou win!\nGAME OVER";
 	items = { "locked doors" };
 }
 
@@ -170,14 +175,14 @@ area LargeWindows {
 	name = "Large windows";
 	neighbors = { "Large room", "0", "Doors across the room", "0" };
 	description = "You walk up to the window and look out to see an endless sea. You appear to be hundreds of meters above it. Where in the world could you possibly be?";
-	items = { "large windows" };
+	# items = { };
 }
 
 area DoorsAcross {
 	name = "Doors across the room";
 	neighbors = { "Doors to the left", "0", "0", "Large windows" };
 	description = "You walk across the large room towards the other door. But before you can get there, you hear a loud siren begin to blare. You frantically scan the room, but there is nothing. You run to the other side.";
-	#  items = {  };
+	items = { "gold key" };
 }
 
 #
@@ -188,3 +193,5 @@ player Player {
 	name = "Lancelot";
 	# inventory = "";
 }
+
+

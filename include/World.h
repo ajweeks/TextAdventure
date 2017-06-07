@@ -97,6 +97,7 @@ struct Area
 {
 	std::string m_Name;
 	std::array<std::pair<Area*, Direction>, 4> m_Neighbors;
+	Area* m_OnSuccessArea;
 	std::string m_Description;
 	std::vector<Item*> m_Items;
 
@@ -119,6 +120,9 @@ struct Item
 	std::string m_Name;
 	std::vector<std::string> m_Descriptions;
 	std::vector<Action*> m_Actions;
+	std::vector<Item*> m_RequiredItems;
+	std::vector<std::string> m_OnSuccessDescriptions;
+	bool m_Activated;
 };
 
 struct Player
@@ -126,12 +130,17 @@ struct Player
 	std::string m_Name;
 	std::vector<Item*> m_Inventory;
 
+	std::vector<Item*>::const_iterator IsItemInInventory(Item* item);
+	void RemoveItemFromInventory(std::vector<Item*>::const_iterator iter);
+	void RemoveItemFromInventory(Item* item);
+	void AddItemToInventory(Item* item);
 	std::string DescribeInventory() const;
 };
 
 struct ParsedInput
 {
 	bool m_Success;
+	std::string m_SuccessText;
 	bool m_DescribeAreaAgain;
 	std::string m_ErrorMessage;
 

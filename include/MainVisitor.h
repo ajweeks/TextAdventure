@@ -31,19 +31,20 @@ private:
 	void AddNeighborPair(Area* area, std::pair<Area*, Direction> pair) const;
 
 	Item* GetItemByName(const std::string& itemName) const;
+	Area* GetAreaByName(const std::string& areaName) const;
 
-	int m_LastVisitedType; // Stores the last visited type (area, item, action, etc.)
-	int m_LastVisitedIndex;
+	size_t m_LastVisitedType; // Stores the last visited type (area, item, action, etc.)
+	size_t m_LastVisitedIndex;
 
 	struct AreaNeighbor
 	{
 		std::string areaName;
 		std::array<std::string, 4> neighborNames;
+		std::string onSuccessAreaName;
 	};
 
 	// Keeps track of the neighbors we read in, so 
 	// we can get the correct pointers to each area's neighbors
 	// after all areas have been parsed in
 	std::vector<AreaNeighbor> m_NeighborStrings;
-
 };
