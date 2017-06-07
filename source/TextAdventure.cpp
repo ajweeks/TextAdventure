@@ -8,6 +8,7 @@
 #include "MainVisitor.h"
 #include "Logger.h"
 #include "IO.h"
+#include "World.h"
 
 #include <antlr4-runtime.h>
 #include "textworldLexer.h"
@@ -22,48 +23,61 @@
 
 using namespace antlr4;
 
-Globals TextAdventure::gGlobals = {};
+Globals* TextAdventure::gGlobals = nullptr;
 
 TextAdventure::TextAdventure() :
 	m_QuitMessage(false),
 	m_Playing(true)
 {
+	if (!TextAdventure::gGlobals)
+	{
+		TextAdventure::gGlobals = new Globals();
+	}
+}
+
+TextAdventure::~TextAdventure()
+{
+	if (TextAdventure::gGlobals)
+	{
+		delete TextAdventure::gGlobals;
+		TextAdventure::gGlobals = nullptr;
+	}
 }
 
 void TextAdventure::PopulateWordWhitelist() const
 {
 	// Actions
-	for (auto iter = gGlobals.m_Actions.begin(); iter != gGlobals.m_Actions.end(); ++iter)
+	for (auto iter = gGlobals->m_Actions.begin(); iter != gGlobals->m_Actions.end(); ++iter)
 	{
 		const Action const* action = (*iter);
 
 		for (auto iter = action->m_Names.begin(); iter != action->m_Names.end(); ++iter)
 		{
-			gGlobals.m_WorldWhitelist.push_back(*iter);
+			gGlobals->m_WorldWhitelist.push_back(*iter);
 		}
 	}
 
 	// Items
-	for (auto iter = gGlobals.m_ItemDefinitions.begin(); iter != gGlobals.m_ItemDefinitions.end(); ++iter)
+	for (auto iter = gGlobals->m_ItemDefinitions.begin(); iter != gGlobals->m_ItemDefinitions.end(); ++iter)
 	{
-		gGlobals.m_WorldWhitelist.push_back((*iter)->m_Name);
+		gGlobals->m_WorldWhitelist.push_back((*iter)->m_Name);
 	}
 
 	// Areas
 	for (auto iter = m_Visitor->m_World->m_Areas.begin(); iter != m_Visitor->m_World->m_Areas.end(); ++iter)
 	{
-		gGlobals.m_WorldWhitelist.push_back((*iter)->m_Name);
+		gGlobals->m_WorldWhitelist.push_back((*iter)->m_Name);
 	}
 
 	// Directions
 	for (size_t i = 0; i < (int)Direction::NONE; ++i)
 	{
-		gGlobals.m_WorldWhitelist.push_back(DirectionToString(Direction(i)));
-		gGlobals.m_WorldWhitelist.push_back(DirectionToShortString(Direction(i)));
+		gGlobals->m_WorldWhitelist.push_back(DirectionToString(Direction(i)));
+		gGlobals->m_WorldWhitelist.push_back(DirectionToShortString(Direction(i)));
 	}
 
 	// Player
-	gGlobals.m_WorldWhitelist.push_back(m_Visitor->m_World->m_Player->m_Name);
+	gGlobals->m_WorldWhitelist.push_back(m_Visitor->m_World->m_Player->m_Name);
 }
 
 void TextAdventure::Run(const std::string& worldFilePath)
@@ -166,7 +180,7 @@ ParsedInput TextAdventure::ParseInput(const std::string& input) const
 	{
 		marked = false;
 
-		for (std::string whiteListWord : gGlobals.m_WorldWhitelist)
+		for (std::string whiteListWord : gGlobals->m_WorldWhitelist)
 		{
 			// Surround with spaces to ensure we're not finding the 'e' in 'exit' for example
 			// and mistaking it for the e commandBedroom
@@ -180,7 +194,7 @@ ParsedInput TextAdventure::ParseInput(const std::string& input) const
 				marked = true;
 
 				// Find out if word is an action
-				const auto actionIt = std::find_if(gGlobals.m_Actions.begin(), gGlobals.m_Actions.end(),
+				const auto actionIt = std::find_if(gGlobals->m_Actions.begin(), gGlobals->m_Actions.end(),
 					[&removedWord](const Action* action) 
 					{ 
 						return Contains(action->m_Names, removedWord); 
@@ -207,7 +221,7 @@ ParsedInput TextAdventure::ParseInput(const std::string& input) const
 
 				const Direction direction = StringToDirection(removedWord);
 
-				if (actionIt != gGlobals.m_Actions.end())
+				if (actionIt != gGlobals->m_Actions.end())
 				{
 					if (result.m_Action == nullptr)
 					{

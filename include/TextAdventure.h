@@ -2,16 +2,18 @@
 
 #include <vector>
 
+struct Globals;
 class MainVisitor;
 
 class TextAdventure
 {
 public:
 	TextAdventure();
+	~TextAdventure();
 
 	void Run(const std::string& worldFilePath) ;
 	
-	static Globals gGlobals;
+	static Globals* gGlobals;
 
 private:
 	void PlayGame();

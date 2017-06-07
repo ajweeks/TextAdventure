@@ -79,6 +79,8 @@ static std::map<std::string, Action_Type> gStringToActionType = {
 
 struct Globals
 {
+	~Globals();
+
 	// Not "real" items, just definitons
 	std::vector<Item*> m_ItemDefinitions; 
 	std::array<Action*, (size_t)Action_Type::NONE> m_Actions;
@@ -88,6 +90,8 @@ struct Globals
 
 struct World
 {
+	~World();
+
 	Player* m_Player;
 	Area* m_CurrentArea;
 	std::vector<Area*> m_Areas;

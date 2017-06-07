@@ -39,10 +39,10 @@ antlrcpp::Any MainVisitor::visitPlayer(textworldParser::PlayerContext* context)
 antlrcpp::Any MainVisitor::visitItem(textworldParser::ItemContext* context)
 {
 	Item* newItem = new Item();
-	TextAdventure::gGlobals.m_ItemDefinitions.push_back(newItem);
+	TextAdventure::gGlobals->m_ItemDefinitions.push_back(newItem);
 
 	m_LastVisitedType = textworldParser::ITEM;
-	m_LastVisitedIndex = TextAdventure::gGlobals.m_ItemDefinitions.size() - 1;
+	m_LastVisitedIndex = TextAdventure::gGlobals->m_ItemDefinitions.size() - 1;
 
 	return visitChildren(context);
 }
@@ -78,9 +78,9 @@ antlrcpp::Any MainVisitor::visitAction(textworldParser::ActionContext* context)
 	newAction->m_Type = type;
 	const int typeIndex = (int)type;
 	
-	assert(typeIndex < TextAdventure::gGlobals.m_Actions.size());
+	assert(typeIndex < TextAdventure::gGlobals->m_Actions.size());
 
-	TextAdventure::gGlobals.m_Actions[typeIndex] = newAction;
+	TextAdventure::gGlobals->m_Actions[typeIndex] = newAction;
 
 	m_LastVisitedType = textworldParser::ACTION;
 	m_LastVisitedIndex = typeIndex;
@@ -144,7 +144,7 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 	{
 	case textworldParser::ITEM:
 	{
-		Item* item = TextAdventure::gGlobals.m_ItemDefinitions[m_LastVisitedIndex];
+		Item* item = TextAdventure::gGlobals->m_ItemDefinitions[m_LastVisitedIndex];
 
 		if (assignmentTypeStr.compare("name") == 0)
 		{
@@ -164,7 +164,7 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 			std::string actionClean = assignmentValue;
 			ToLower(actionClean);
 
-			Action* action = TextAdventure::gGlobals.m_Actions[(int)gStringToActionType[actionClean]];
+			Action* action = TextAdventure::gGlobals->m_Actions[(int)gStringToActionType[actionClean]];
 			assert(action != nullptr);
 			item->m_Actions.push_back(action);
 		}
@@ -179,7 +179,7 @@ void MainVisitor::AssignParsedValue(const std::string& assignmentTypeStr, const 
 	} break;
 	case textworldParser::ACTION:
 	{
-		Action* action = TextAdventure::gGlobals.m_Actions[m_LastVisitedIndex];
+		Action* action = TextAdventure::gGlobals->m_Actions[m_LastVisitedIndex];
 
 		if (assignmentTypeStr.compare("names") == 0)
 		{
@@ -311,11 +311,11 @@ Item* MainVisitor::GetItemByName(const std::string& itemName) const
 	std::string itemNameClean = itemName;
 	ToLower(itemNameClean);
 
-	for (size_t i = 0; i < TextAdventure::gGlobals.m_ItemDefinitions.size(); i++)
+	for (size_t i = 0; i < TextAdventure::gGlobals->m_ItemDefinitions.size(); i++)
 	{
-		if (TextAdventure::gGlobals.m_ItemDefinitions[i]->m_Name.compare(itemNameClean) == 0)
+		if (TextAdventure::gGlobals->m_ItemDefinitions[i]->m_Name.compare(itemNameClean) == 0)
 		{
-			result = TextAdventure::gGlobals.m_ItemDefinitions[i];
+			result = TextAdventure::gGlobals->m_ItemDefinitions[i];
 			break;
 		}
 	}

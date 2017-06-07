@@ -273,3 +273,26 @@ std::string Player::DescribeInventory() const
 		return ss.str();
 	}
 }
+
+World::~World()
+{
+	delete m_Player;
+	
+	for (size_t i = 0; i < m_Areas.size(); i++)
+	{
+		delete m_Areas[i];
+	}
+}
+
+Globals::~Globals()
+{
+	for (size_t i = 0; i < m_ItemDefinitions.size(); i++)
+	{
+		delete m_ItemDefinitions[i];
+	}
+
+	for (size_t i = 0; i < m_Actions.size(); i++)
+	{
+		delete m_Actions[i];
+	}
+}
