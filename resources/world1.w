@@ -27,48 +27,8 @@ action drop {
 	names = { "drop" };
 }
 
-action equip {
-	names = { "equip" };
-}
-
-action eat {
-	names = { "eat", "consume", "chow down", "gobble down" };
-}
-
-action drink {
-	names = { "drink", "glug", "slurp", "chug" };
-}
-
-action trade {
-	names = { "trade", "swap" };
-}
-
-action give {
-	names = { "give", "gift" };
-}
-
-action speak {
-	names = { "speak" };
-}
-
-action look {
-	names = { "look", "look at", "watch" };
-}
-
 action inspect {
 	names = { "inspect", "study", "examine" };
-}
-
-action read {
-	names = { "read" };
-}
-
-action attack {
-	names = { "attack" };
-}
-
-action throw {
-	names = { "throw", "huck", "chuck", "hurl" };
 }
 
 action yes {
@@ -96,14 +56,14 @@ item bedroomWindow {
 	name = "window";
 	descriptions = { "Through the windows you see an vast ocean, far below. Where could you possibly be?",
 		"Out the window you see a seemingly endless ocean, with no land in sight."};
-	actions = { "eat" };
+	# actions = { };
 }
 
 item shinyObject {
 	name = "shiny object";
 	descriptions = { "An intensly glowing metalic sphere",
 		"A hot, glowing, metalic sphere. Your skin would probably melt off in milliseconds if you went near it."};
-	actions = { "eat" };
+	# actions = { };
 }
 
 item goldKey {
@@ -190,8 +150,8 @@ area DoorsAcross {
 #
 
 player Player {
-	name = "Lancelot";
-	# inventory = "";
+	name = "Nicole";
+	# inventory = "fistful of garlic cloves";
 }
 
 

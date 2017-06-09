@@ -49,7 +49,7 @@ void TextAdventure::PopulateWordWhitelist() const
 	// Actions
 	for (auto iter = gGlobals->m_Actions.begin(); iter != gGlobals->m_Actions.end(); ++iter)
 	{
-		const Action const* action = (*iter);
+		const Action* action = (*iter);
 
 		for (auto iter = action->m_Names.begin(); iter != action->m_Names.end(); ++iter)
 		{
@@ -101,10 +101,6 @@ void TextAdventure::Run(const std::string& worldFilePath)
 		PopulateWordWhitelist();
 
 		PlayGame();
-
-		//IO::OutputString("Enter any character to exit...");
-		//std::string s;
-		//std::getline(std::cin, s);
 	}
 }
 
@@ -162,8 +158,6 @@ void TextAdventure::PlayGame()
 			IO::OutputString("Thank you for playing! Press any key to exit ...");
 			IO::InputLine();
 		}
-
-		//ClearConsole();
 	}
 }
 
@@ -172,6 +166,7 @@ ParsedInput TextAdventure::ParseInput(const std::string& input) const
 	ParsedInput result = {};
 
 	std::string inputCopy = input;
+
 	// Add spaces to front and back for easier parsing
 	inputCopy = ' ' + inputCopy + ' ';
 
@@ -404,30 +399,6 @@ void TextAdventure::ApplyInput(ParsedInput& parsedInput) const
 			}
 		}
 		break;
-	case Action_Type::EQUIP:
-		break;
-	case Action_Type::EAT:
-	{
-		if (parsedInput.m_Item == nullptr)
-		{
-			parsedInput.m_ErrorMessage = "You can't eat that!";
-		}
-		else
-		{
-			IO::OutputString("Yum");
-			m_Visitor->m_World->m_CurrentArea->RemoveItem(parsedInput.m_Item);
-			parsedInput.m_Success = true;
-			return;
-		}
-	} break;
-	case Action_Type::TRADE:
-		break;
-	case Action_Type::GIVE:
-		break;
-	case Action_Type::SPEAK:
-		break;
-	case Action_Type::LOOK:
-		break;
 	case Action_Type::INSPECT:
 	{
 		if (parsedInput.m_Item != nullptr)
@@ -510,12 +481,6 @@ void TextAdventure::ApplyInput(ParsedInput& parsedInput) const
 			}
 		}
 	} break;
-	case Action_Type::READ:
-		break;
-	case Action_Type::ATTACK:
-		break;
-	case Action_Type::THROW:
-		break;
 	case Action_Type::YES:
 		break;
 	case Action_Type::NO:
@@ -554,15 +519,7 @@ void TextAdventure::PrintInvalidInputMessage(const ParsedInput& parsedInput)
 	} break;
 	case Action_Type::TAKE:
 	case Action_Type::DROP:
-	case Action_Type::EQUIP:
-	case Action_Type::EAT:
-	case Action_Type::TRADE:
-	case Action_Type::GIVE:
-	case Action_Type::SPEAK:
 	case Action_Type::INSPECT:
-	case Action_Type::READ:
-	case Action_Type::ATTACK:
-	case Action_Type::THROW:
 	{
 		IO::OutputString(defaultWarningString);
 	} break;
@@ -570,22 +527,10 @@ void TextAdventure::PrintInvalidInputMessage(const ParsedInput& parsedInput)
 	{
 		IO::OutputString(parsedInput.m_ErrorMessage);
 	} break;
-	case Action_Type::LOOK:
-	{
-		if (remainingStringNoWS.empty())
-		{
-			IO::OutputString("Please specify what you want to look at");
-		}
-		else
-		{
-			IO::OutputString(defaultWarningString);
-		}
-	} break;
 	case Action_Type::COMMANDS:
 	{
 		IO::OutputString("The available commands are: ");
-		IO::OutputString("GO, HELP, COMMANDS, INVENTORY, TAKE DROP, EQUIP, EAT, TRADE, GIVE,"
-			"SPEAK, ENTER, EXIT, LOOK, INSPECT, READ, ATTACK, THROW, YES, NO");
+		IO::OutputString("GO, HELP, INVENTORY, TAKE, DROP, ENTER, EXIT, INSPECT, QUIT");
 	} break;
 	case Action_Type::HELP:
 	{
